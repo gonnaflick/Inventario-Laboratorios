@@ -182,4 +182,14 @@ export class RequestComponent implements OnInit {
     const nuevoPanel = { id: this.panels.length + 1 };
     this.panels.push(nuevoPanel);
   }
+
+  eliminarPanel(index: number) {
+    if (this.panels.length > 1) {
+      this.panels.splice(index, 1);
+    }
+  }
+
+  trackByFn(index: number, item: { id: number }) {
+    return item.id;
+  }
 }

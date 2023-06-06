@@ -71,7 +71,7 @@
       <ng-template matStepLabel>Equipo a solicitar</ng-template>
 
       <mat-accordion class="example-headers-align">
-        <mat-expansion-panel *ngFor="let panel of panels">
+        <mat-expansion-panel *ngFor="let panel of panels; trackBy: trackByFn">
           <mat-expansion-panel-header>
             <mat-panel-title> Equipo #{{ panel.id }} </mat-panel-title>
             <mat-panel-description>
