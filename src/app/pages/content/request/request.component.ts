@@ -55,13 +55,10 @@ export const _filter = (opt: string[], value: string): string[] => {
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-<<<<<<< HEAD
     MatExpansionModule,
     MatDatepickerModule,
     MatNativeDateModule,
-=======
     NgIf,
->>>>>>> 21acc88de55646d257e51cc394135b4a8d3c51e5
   ],
 })
 export class RequestComponent implements OnInit {
@@ -81,8 +78,6 @@ export class RequestComponent implements OnInit {
 
   constructor(private _formBuilder: FormBuilder) {}
 
-<<<<<<< HEAD
-=======
   getErrorMessage() {
     if (this.firstStepForm.controls['name'].hasError('required')) {
       return 'Nombre obligatorio.';
@@ -93,7 +88,6 @@ export class RequestComponent implements OnInit {
       : '';
   }
 
->>>>>>> 21acc88de55646d257e51cc394135b4a8d3c51e5
   ngOnInit() {
     this.filteredOptions = this.firstStepForm
       .get('subjectGroup')!

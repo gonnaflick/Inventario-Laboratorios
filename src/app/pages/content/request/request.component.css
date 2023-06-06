@@ -6,15 +6,11 @@
   margin-top: 16px;
 }
 
-<<<<<<< HEAD
 .example-headers-align .mat-expansion-panel-header-description {
   justify-content: space-between;
   align-items: center;
 }
 
 .example-headers-align .mat-mdc-form-field + .mat-mdc-form-field {
-=======
-.example-container mat-form-field + mat-form-field {
->>>>>>> 21acc88de55646d257e51cc394135b4a8d3c51e5
   margin-left: 8px;
 }
