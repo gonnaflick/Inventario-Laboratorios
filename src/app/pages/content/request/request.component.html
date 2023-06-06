@@ -1,0 +1,83 @@
+<mat-stepper labelPosition="end" #stepper>
+  <mat-step [stepControl]="firstStepForm">
+    <form [formGroup]="firstStepForm">
+      <ng-template matStepLabel>Información del solicitante</ng-template>
+      <mat-form-field>
+        <mat-label>Nombre</mat-label>
+        <input
+          matInput
+          placeholder="Nombre y apellido"
+          formControlName="name"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Matricula</mat-label>
+        <input
+          matInput
+          placeholder="Ej. 338906"
+          formControlName="student_id"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Materia</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="subjectGroup"
+          [matAutocomplete]="autoGroup"
+          required
+        />
+        <mat-autocomplete #autoGroup="matAutocomplete">
+          <mat-optgroup
+            style="font-weight: bold"
+            *ngFor="let group of filteredOptions | async"
+            [label]="group.group"
+          >
+            <mat-option *ngFor="let group of group.subjects" [value]="group">
+              {{ group }}
+            </mat-option>
+          </mat-optgroup>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <div>
+        <button
+          (click)="submitSignature()"
+          mat-flat-button
+          color="primary"
+          matStepperNext
+        >
+          Siguiente
+        </button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Equipo a solicitar</ng-template>
+      <mat-form-field>
+        <mat-label>Address</mat-label>
+        <input
+          matInput
+          formControlName="secondCtrl"
+          placeholder="Ex. 1 Main St, New York, NY"
+          required
+        />
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Resumen y confirmación</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-stepper>
