@@ -67,7 +67,10 @@ export class RequestComponent implements OnInit {
       Validators.required,
       Validators.pattern('[a-zA-Z ]*'),
     ]),
-    student_id: new FormControl('', Validators.required),
+    student_id: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[0-9]*'),
+    ]),
     qr_signature: new FormControl('', Validators.required),
     subjectGroup: new FormControl('', Validators.required),
   });
@@ -76,16 +79,58 @@ export class RequestComponent implements OnInit {
     secondCtrl: ['', Validators.required],
   });
 
+  panels: { id: number }[] = [];
+
   constructor(private _formBuilder: FormBuilder) {}
 
-  getErrorMessage() {
-    if (this.firstStepForm.controls['name'].hasError('required')) {
+  getErrorMessage(errorType: String) {
+    /*--------------------*/
+    /*Validacion nombre*/
+    /*--------------------*/
+
+    if (
+      this.firstStepForm.controls['name'].hasError('required') &&
+      errorType === 'name'
+    ) {
       return 'Nombre obligatorio.';
     }
 
-    return this.firstStepForm.controls['name'].hasError('pattern')
-      ? 'Nombre no valido.'
-      : '';
+    if (
+      this.firstStepForm.controls['name'].hasError('pattern') &&
+      errorType === 'name'
+    ) {
+      return 'Nombre no valido.';
+    }
+
+    /*--------------------*/
+    /*Validacion matricula*/
+    /*--------------------*/
+
+    if (
+      this.firstStepForm.controls['student_id'].hasError('required') &&
+      errorType === 'student_id'
+    ) {
+      return 'Matricula obligatoria.';
+    }
+
+    if (
+      this.firstStepForm.controls['student_id'].hasError('pattern') &&
+      errorType === 'student_id'
+    ) {
+      return 'Matricula no valida.';
+    }
+
+    /*------------------*/
+    /*Validacion materia*/
+    /*------------------*/
+
+    if (
+      this.firstStepForm.controls['subjectGroup'].hasError('required') &&
+      errorType === 'subjectGroup'
+    ) {
+      return 'Materia obligatoria.';
+    }
+    return '';
   }
 
   ngOnInit() {
@@ -133,16 +178,8 @@ export class RequestComponent implements OnInit {
     return this.groupSubjects;
   }
 
-  panels: { id: number }[] = [{ id: 1 }];
-
   agregarPanel() {
     const nuevoPanel = { id: this.panels.length + 1 };
     this.panels.push(nuevoPanel);
-  }
-
-  eliminarPanel(index: number) {
-    if (this.panels.length > 1) {
-      this.panels.splice(index, 1);
-    }
   }
 }
