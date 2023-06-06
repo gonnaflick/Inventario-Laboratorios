@@ -8,11 +8,12 @@
           matInput
           placeholder="Nombre y apellido"
           formControlName="name"
-          pattern="[a-zA-Z ]*"
-          maxlength="50"
+          maxlengtzh="50"
           required
         />
-        <mat-error *ngIf="name.invalid">{{ getErrorMessage() }}</mat-error>
+        <mat-error *ngIf="this.firstStepForm.controls['name'].invalid">{{
+          getErrorMessage()
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Matricula</mat-label>
@@ -57,9 +58,6 @@
       </div>
     </form>
   </mat-step>
-
-  <!--********************************************************************************************************************-->
-
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Equipo a solicitar</ng-template>
@@ -73,14 +71,11 @@
         />
       </mat-form-field>
       <div>
-        <button mat-flat-button color="primary" matStepperPrevious>Back</button>
-        <button mat-flat-button color="primary" matStepperNext>Next</button>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
       </div>
     </form>
   </mat-step>
-
-  <!--********************************************************************************************************************-->
-
   <mat-step>
     <ng-template matStepLabel>Resumen y confirmación</ng-template>
     <p>You are now done.</p>

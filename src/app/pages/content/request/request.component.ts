@@ -16,6 +16,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { NgFor, AsyncPipe } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { NgIf } from '@angular/common';
 
 export interface GroupSubject {
   group: string;
@@ -50,14 +51,18 @@ export const _filter = (opt: string[], value: string): string[] => {
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    NgIf,
   ],
 })
 export class RequestComponent implements OnInit {
   firstStepForm = this._formBuilder.group({
-    name: ['', Validators.required],
-    student_id: ['', Validators.required],
-    qr_signature: ['', Validators.required],
-    subjectGroup: ['', Validators.required],
+    name: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[a-zA-Z ]*'),
+    ]),
+    student_id: new FormControl('', Validators.required),
+    qr_signature: new FormControl('', Validators.required),
+    subjectGroup: new FormControl('', Validators.required),
   });
 
   secondFormGroup = this._formBuilder.group({
@@ -67,12 +72,15 @@ export class RequestComponent implements OnInit {
   constructor(private _formBuilder: FormBuilder) {}
 
   getErrorMessage() {
-    if (this.firstStepForm.name.hasError('required')) {
-      return 'You must enter a value';
+    if (this.firstStepForm.controls['name'].hasError('required')) {
+      return 'Nombre obligatorio.';
     }
 
-    return this.name.hasError('email') ? 'Not a valid email' : '';
+    return this.firstStepForm.controls['name'].hasError('pattern')
+      ? 'Nombre no valido.'
+      : '';
   }
+
   ngOnInit() {
     this.filteredOptions = this.firstStepForm
       .get('subjectGroup')!
