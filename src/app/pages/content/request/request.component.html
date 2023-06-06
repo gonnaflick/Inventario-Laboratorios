@@ -58,17 +58,20 @@
       </div>
     </form>
   </mat-step>
+
+  <!--************************************************ Abajo anda el paso 2 **********************************************************-->
+
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Equipo a solicitar</ng-template>
 
       <mat-accordion class="example-headers-align">
-        <mat-expansion-panel *ngFor="let panel of panels">
+        <mat-expansion-panel *ngFor="let panel of panels; let i = index">
           <mat-expansion-panel-header>
             <mat-panel-title> Equipo #{{ panel.id }} </mat-panel-title>
             <mat-panel-description>
               Al chile luego le pongo algo pq no me muevo rico
-              <mat-icon>account_circle</mat-icon>
+              <mat-icon>edit_document</mat-icon>
             </mat-panel-description>
           </mat-expansion-panel-header>
 
@@ -82,11 +85,18 @@
             <input matInput type="number" min="1" />
           </mat-form-field>
 
-          <button mat-button color="warn" (click)="agregarPanel()">
-            Futuro boton para eliminar
+          <button
+            mat-icon-button
+            color="warn"
+            style="margin: 10px"
+            (click)="eliminarPanel(i)"
+            *ngIf="panels.length > 1"
+          >
+            <mat-icon>delete</mat-icon>
           </button>
-          <button mat-button color="primary" (click)="agregarPanel()">
-            Futuro boton para no se algo
+
+          <button mat-icon-button color="primary" (click)="agregarPanel()">
+            <mat-icon>savings</mat-icon>
           </button>
         </mat-expansion-panel>
       </mat-accordion>
@@ -115,6 +125,9 @@
       </div>
     </form>
   </mat-step>
+
+  <!--************************************************ Abajo anda el paso 3 **********************************************************-->
+
   <mat-step>
     <ng-template matStepLabel>Resumen y confirmación</ng-template>
     <p>You are now done.</p>

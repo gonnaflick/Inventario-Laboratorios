@@ -133,10 +133,16 @@ export class RequestComponent implements OnInit {
     return this.groupSubjects;
   }
 
-  panels: { id: number }[] = [];
+  panels: { id: number }[] = [{ id: 1 }];
 
   agregarPanel() {
     const nuevoPanel = { id: this.panels.length + 1 };
     this.panels.push(nuevoPanel);
+  }
+
+  eliminarPanel(index: number) {
+    if (this.panels.length > 1) {
+      this.panels.splice(index, 1);
+    }
   }
 }
