@@ -12,7 +12,6 @@
           maxlength="50"
           required
         />
-        <mat-error *ngIf="name.invalid">{{ getErrorMessage() }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Matricula</mat-label>
@@ -63,18 +62,57 @@
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Equipo a solicitar</ng-template>
-      <mat-form-field>
-        <mat-label>Address</mat-label>
-        <input
-          matInput
-          formControlName="secondCtrl"
-          placeholder="Ex. 1 Main St, New York, NY"
-          required
-        />
-      </mat-form-field>
+
+      <mat-accordion class="example-headers-align">
+        <mat-expansion-panel *ngFor="let panel of panels">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Equipo #{{ panel.id }} </mat-panel-title>
+            <mat-panel-description>
+              Al chile luego le pongo algo pq no me muevo rico
+              <mat-icon>account_circle</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <mat-form-field>
+            <mat-label>Nombre del equipo</mat-label>
+            <input matInput />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Cantidad</mat-label>
+            <input matInput type="number" min="1" />
+          </mat-form-field>
+
+          <button mat-button color="warn" (click)="agregarPanel()">
+            Futuro boton para eliminar
+          </button>
+          <button mat-button color="primary" (click)="agregarPanel()">
+            Futuro boton para no se algo
+          </button>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <button mat-button color="primary" (click)="agregarPanel()">
+        Agregar panel
+      </button>
+
       <div>
-        <button mat-flat-button color="primary" matStepperPrevious>Back</button>
-        <button mat-flat-button color="primary" matStepperNext>Next</button>
+        <button
+          mat-flat-button
+          color="primary"
+          matStepperPrevious
+          style="margin: 10px"
+        >
+          Atras
+        </button>
+        <button
+          mat-flat-button
+          color="primary"
+          matStepperNext
+          style="margin: 10px"
+        >
+          Siguiente
+        </button>
       </div>
     </form>
   </mat-step>

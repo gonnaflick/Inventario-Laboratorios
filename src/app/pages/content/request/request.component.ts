@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+
 import {
   FormControl,
   FormsModule,
@@ -50,6 +54,9 @@ export const _filter = (opt: string[], value: string): string[] => {
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatExpansionModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
 })
 export class RequestComponent implements OnInit {
@@ -66,13 +73,6 @@ export class RequestComponent implements OnInit {
 
   constructor(private _formBuilder: FormBuilder) {}
 
-  getErrorMessage() {
-    if (this.firstStepForm.name.hasError('required')) {
-      return 'You must enter a value';
-    }
-
-    return this.name.hasError('email') ? 'Not a valid email' : '';
-  }
   ngOnInit() {
     this.filteredOptions = this.firstStepForm
       .get('subjectGroup')!
@@ -116,5 +116,12 @@ export class RequestComponent implements OnInit {
     }
 
     return this.groupSubjects;
+  }
+
+  panels: { id: number }[] = [];
+
+  agregarPanel() {
+    const nuevoPanel = { id: this.panels.length + 1 };
+    this.panels.push(nuevoPanel);
   }
 }
