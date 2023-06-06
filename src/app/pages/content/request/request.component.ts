@@ -145,4 +145,8 @@ export class RequestComponent implements OnInit {
       this.panels.splice(index, 1);
     }
   }
+
+  trackByFn(index: number, item: { id: number }) {
+    return item.id;
+  }
 }
