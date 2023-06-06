@@ -57,6 +57,9 @@
       </div>
     </form>
   </mat-step>
+
+  <!--********************************************************************************************************************-->
+
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Equipo a solicitar</ng-template>
@@ -70,11 +73,14 @@
         />
       </mat-form-field>
       <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-flat-button color="primary" matStepperPrevious>Back</button>
+        <button mat-flat-button color="primary" matStepperNext>Next</button>
       </div>
     </form>
   </mat-step>
+
+  <!--********************************************************************************************************************-->
+
   <mat-step>
     <ng-template matStepLabel>Resumen y confirmación</ng-template>
     <p>You are now done.</p>
