@@ -1,4 +1,4 @@
-<mat-stepper labelPosition="end" #stepper>
+<mat-stepper labelPosition="bottom" #stepper>
   <mat-step [stepControl]="firstStepForm">
     <form [formGroup]="firstStepForm">
       <ng-template matStepLabel>Información del solicitante</ng-template>
@@ -8,8 +8,11 @@
           matInput
           placeholder="Nombre y apellido"
           formControlName="name"
+          pattern="[a-zA-Z ]*"
+          maxlength="50"
           required
         />
+        <mat-error *ngIf="name.invalid">{{ getErrorMessage() }}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Matricula</mat-label>

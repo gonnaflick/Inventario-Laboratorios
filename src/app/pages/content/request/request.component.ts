@@ -66,6 +66,13 @@ export class RequestComponent implements OnInit {
 
   constructor(private _formBuilder: FormBuilder) {}
 
+  getErrorMessage() {
+    if (this.firstStepForm.name.hasError('required')) {
+      return 'You must enter a value';
+    }
+
+    return this.name.hasError('email') ? 'Not a valid email' : '';
+  }
   ngOnInit() {
     this.filteredOptions = this.firstStepForm
       .get('subjectGroup')!
