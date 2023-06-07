@@ -66,17 +66,22 @@
       </div>
     </form>
   </mat-step>
+
+  <!--*********************************************** Abajo anda el paso 2 ************************************************************-->
+
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Equipo a solicitar</ng-template>
-
       <mat-accordion class="example-headers-align">
-        <mat-expansion-panel *ngFor="let panel of panels; trackBy: trackByFn">
+        <mat-expansion-panel
+          *ngFor="let panel of panels"
+          [expanded]="panel.id === panels.length"
+        >
           <mat-expansion-panel-header>
             <mat-panel-title> Equipo #{{ panel.id }} </mat-panel-title>
             <mat-panel-description>
-              Al chile luego le pongo algo pq no me muevo rico
-              <mat-icon>account_circle</mat-icon>
+              Creo que por aca va una descripcion
+              <mat-icon>edit_document</mat-icon>
             </mat-panel-description>
           </mat-expansion-panel-header>
 
@@ -90,39 +95,47 @@
             <input matInput type="number" min="1" />
           </mat-form-field>
 
-          <button mat-button color="warn" (click)="agregarPanel()">
-            Futuro boton para eliminar
+          <button
+            mat-icon-button
+            color="warn"
+            style="margin-left: 10px"
+            (click)="eliminarPanel(panel)"
+            *ngIf="panels.length > 1"
+          >
+            <mat-icon>delete</mat-icon>
           </button>
-          <button mat-button color="primary" (click)="agregarPanel()">
-            Futuro boton para no se algo
+
+          <button
+            mat-icon-button
+            color="primary"
+            style="margin-left: 10px"
+            (click)="agregarPanel()"
+          >
+            <mat-icon>add</mat-icon>
           </button>
         </mat-expansion-panel>
       </mat-accordion>
 
       <button mat-button color="primary" (click)="agregarPanel()">
-        Agregar panel
+        <mat-icon>add</mat-icon>
+        Agregar Equipo
       </button>
 
       <div>
         <button
           mat-flat-button
           color="primary"
-          matStepperPrevious
-          style="margin: 10px"
-        >
-          Atras
-        </button>
-        <button
-          mat-flat-button
-          color="primary"
           matStepperNext
-          style="margin: 10px"
+          style="margin-top: 20px; width: 100%"
         >
           Siguiente
         </button>
       </div>
     </form>
   </mat-step>
+
+  <!--*********************************************** Abajo anda el paso 3 ************************************************************-->
+
   <mat-step>
     <ng-template matStepLabel>Resumen y confirmación</ng-template>
     <p>You are now done.</p>

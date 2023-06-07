@@ -10,6 +10,14 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 
 import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarModule,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
+import { MatSelectModule } from '@angular/material/select';
+
+import {
   FormControl,
   FormsModule,
   ReactiveFormsModule,
@@ -59,6 +67,8 @@ export const _filter = (opt: string[], value: string): string[] => {
     MatDatepickerModule,
     MatNativeDateModule,
     NgIf,
+    MatSelectModule,
+    MatSnackBarModule,
   ],
 })
 export class RequestComponent implements OnInit {
@@ -79,9 +89,14 @@ export class RequestComponent implements OnInit {
     secondCtrl: ['', Validators.required],
   });
 
-  panels: { id: number }[] = [];
+  panels: { id: number; nombre: string; cantidad: number }[] = [
+    { id: 1, nombre: '', cantidad: 0 },
+  ];
 
-  constructor(private _formBuilder: FormBuilder) {}
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar
+  ) {}
 
   getErrorMessage(errorType: String) {
     /*--------------------*/
@@ -179,17 +194,32 @@ export class RequestComponent implements OnInit {
   }
 
   agregarPanel() {
-    const nuevoPanel = { id: this.panels.length + 1 };
+    const nuevoPanel = { id: this.panels.length + 1, nombre: '', cantidad: 0 };
     this.panels.push(nuevoPanel);
   }
 
-  eliminarPanel(index: number) {
-    if (this.panels.length > 1) {
+  eliminarPanel(panel: { id: number; nombre: string; cantidad: number }) {
+    const index = this.panels.indexOf(panel);
+    if (index > -1 && this.panels.length > 1) {
+      const panel_cpy = panel;
       this.panels.splice(index, 1);
-    }
-  }
 
-  trackByFn(index: number, item: { id: number }) {
-    return item.id;
+      this.panels.forEach((panel, i) => {
+        panel.id = i + 1;
+      });
+
+      const snackBarRef = this._snackBar.open(
+        `Panel ${panel.id} eliminado`,
+        'Deshacer',
+        { duration: 5000 }
+      );
+      snackBarRef.onAction().subscribe(() => {
+        this.panels.splice(index, 0, panel);
+
+        this.panels.forEach((panel, i) => {
+          panel.id = i + 1;
+        });
+      });
+    }
   }
 }
