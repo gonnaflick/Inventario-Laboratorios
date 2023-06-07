@@ -8,30 +8,42 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-
 import {
   FormControl,
   FormsModule,
   ReactiveFormsModule,
   FormBuilder,
   Validators,
+  ValidatorFn,
+  AbstractControl,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { NgFor, AsyncPipe } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NgIf } from '@angular/common';
-
-export interface GroupSubject {
-  group: string;
-  subjects: string[];
-}
+import { GroupSubject } from 'src/app/pages/interface/groupSubject.interface';
 
 export const _filter = (opt: string[], value: string): string[] => {
   const filterValue = value.toLowerCase();
 
   return opt.filter((item) => item.toLowerCase().includes(filterValue));
 };
+
+export function RequireMatch(groupSubjects: GroupSubject[]): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const value = control.value;
+    const isValid = groupSubjects.some((group) =>
+      group.subjects.includes(value)
+    );
+
+    if (Validators.required(control) && !value) {
+      return { required: { value: control.value } };
+    }
+
+    return isValid ? null : { pattern: { value: control.value } };
+  };
+}
 
 @Component({
   selector: 'app-request',
@@ -62,96 +74,6 @@ export const _filter = (opt: string[], value: string): string[] => {
   ],
 })
 export class RequestComponent implements OnInit {
-  firstStepForm = this._formBuilder.group({
-    name: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[a-zA-Z ]*'),
-    ]),
-    student_id: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[0-9]*'),
-    ]),
-    qr_signature: new FormControl('', Validators.required),
-    subjectGroup: new FormControl('', Validators.required),
-  });
-
-  secondFormGroup = this._formBuilder.group({
-    secondCtrl: ['', Validators.required],
-  });
-
-  panels: { id: number }[] = [];
-
-  constructor(private _formBuilder: FormBuilder) {}
-
-  getErrorMessage(errorType: String) {
-    /*--------------------*/
-    /*Validacion nombre*/
-    /*--------------------*/
-
-    if (
-      this.firstStepForm.controls['name'].hasError('required') &&
-      errorType === 'name'
-    ) {
-      return 'Nombre obligatorio.';
-    }
-
-    if (
-      this.firstStepForm.controls['name'].hasError('pattern') &&
-      errorType === 'name'
-    ) {
-      return 'Nombre no valido.';
-    }
-
-    /*--------------------*/
-    /*Validacion matricula*/
-    /*--------------------*/
-
-    if (
-      this.firstStepForm.controls['student_id'].hasError('required') &&
-      errorType === 'student_id'
-    ) {
-      return 'Matricula obligatoria.';
-    }
-
-    if (
-      this.firstStepForm.controls['student_id'].hasError('pattern') &&
-      errorType === 'student_id'
-    ) {
-      return 'Matricula no valida.';
-    }
-
-    /*------------------*/
-    /*Validacion materia*/
-    /*------------------*/
-
-    if (
-      this.firstStepForm.controls['subjectGroup'].hasError('required') &&
-      errorType === 'subjectGroup'
-    ) {
-      return 'Materia obligatoria.';
-    }
-    return '';
-  }
-
-  ngOnInit() {
-    this.filteredOptions = this.firstStepForm
-      .get('subjectGroup')!
-      .valueChanges.pipe(
-        startWith(''),
-        map((value) => this._filterGroup(value || ''))
-      );
-  }
-
-  submitSignature(): void {
-    /*TEMPORAL, DEBE INCLUIR EL ESCANEO QR Y GUARDAR EL LINK DEL USUARIO, ESTO ES LO QUE SE VALIDA*/
-    this.firstStepForm.get('qr_signature')?.setValue('true');
-    console.log('true');
-  }
-
-  /*-----------------------*/
-  /*FILTRO Y AUTOCOMPLETADO*/
-  /*-----------------------*/
-
   filteredOptions?: Observable<GroupSubject[]>;
 
   groupSubjects: GroupSubject[] = [
@@ -165,6 +87,71 @@ export class RequestComponent implements OnInit {
     },
   ];
 
+  firstStepForm = this._formBuilder.group({
+    name: new FormControl('', [
+      Validators.required,
+      Validators.pattern(
+        '^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+( [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$'
+      ),
+    ]),
+    studentId: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^[0-9]{6,6}$'),
+    ]),
+    qrSignature: new FormControl('', Validators.required),
+    subjectGroup: new FormControl('', [
+      RequireMatch(this.groupSubjects),
+      Validators.required,
+    ]),
+  });
+
+  secondFormGroup = this._formBuilder.group({
+    secondCtrl: ['', Validators.required],
+  });
+
+  panels: { id: number }[] = [{ id: 1 }];
+
+  constructor(private _formBuilder: FormBuilder) {}
+
+  public errorMessage = {
+    nameControl: [
+      { type: 'pattern', message: 'Nombre no valido' },
+      { type: 'required', message: 'Nombre obligatorio' },
+    ],
+    studentIdControl: [
+      { type: 'pattern', message: 'Matricula no valida' },
+      { type: 'required', message: 'Matricula obligatoria' },
+    ],
+    subjectGroupControl: [
+      { type: 'pattern', message: 'Materia no reconocida' },
+      { type: 'required', message: 'Materia obligatoria' },
+    ],
+  };
+
+  ngOnInit() {
+    this.filteredOptions = this.firstStepForm
+      .get('subjectGroup')!
+      .valueChanges.pipe(
+        startWith(''),
+        map((value) => this._filterGroup(value || ''))
+      );
+  }
+
+  submitSignature(): void {
+    /*TEMPORAL, DEBE INCLUIR EL ESCANEO QR Y GUARDAR EL LINK DEL USUARIO, ESTO ES LO QUE SE VALIDA*/
+    this.firstStepForm.get('qrSignature')?.setValue('true');
+    console.log('true');
+  }
+
+  showError(controlName: string, errorType: string): boolean {
+    const controlErrors = this.firstStepForm.get(controlName)?.errors;
+    return controlErrors && controlErrors[errorType];
+  }
+
+  /*-----------------------*/
+  /*FILTRO Y AUTOCOMPLETADO*/
+  /*-----------------------*/
+
   private _filterGroup(value: string): GroupSubject[] {
     if (value) {
       return this.groupSubjects
@@ -177,6 +164,10 @@ export class RequestComponent implements OnInit {
 
     return this.groupSubjects;
   }
+
+  /*-----*/
+  /*PANEL*/
+  /*-----*/
 
   agregarPanel() {
     const nuevoPanel = { id: this.panels.length + 1 };

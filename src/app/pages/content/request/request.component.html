@@ -2,7 +2,7 @@
   <mat-step [stepControl]="firstStepForm">
     <form [formGroup]="firstStepForm">
       <ng-template matStepLabel>Información del solicitante</ng-template>
-      <mat-form-field>
+      <mat-form-field [hideRequiredMarker]="true">
         <mat-label>Nombre</mat-label>
         <input
           matInput
@@ -11,28 +11,55 @@
           maxlength="50"
           required
         />
-        <mat-error *ngIf="this.firstStepForm.controls['name'].invalid">{{
-          getErrorMessage("name")
-        }}</mat-error>
+        <mat-error
+          *ngIf="
+            this.firstStepForm.controls['name'].hasError('pattern') &&
+            showError('name', 'pattern')
+          "
+        >
+          {{ errorMessage.nameControl[0].message }}
+        </mat-error>
+        <mat-error
+          *ngIf="
+            this.firstStepForm.controls['name'].hasError('required') &&
+            showError('name', 'required')
+          "
+        >
+          {{ errorMessage.nameControl[1].message }}
+        </mat-error>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field [hideRequiredMarker]="true">
         <mat-label>Matricula</mat-label>
         <input
           matInput
           placeholder="Ej. 338906"
-          formControlName="student_id"
+          formControlName="studentId"
           maxlength="6"
           required
         />
-        <mat-error *ngIf="this.firstStepForm.controls['student_id'].invalid">{{
-          getErrorMessage("student_id")
-        }}</mat-error>
+        <mat-error
+          *ngIf="
+            this.firstStepForm.controls['studentId'].hasError('pattern') &&
+            showError('studentId', 'pattern')
+          "
+        >
+          {{ errorMessage.studentIdControl[0].message }}
+        </mat-error>
+        <mat-error
+          *ngIf="
+            this.firstStepForm.controls['studentId'].hasError('required') &&
+            showError('studentId', 'required')
+          "
+        >
+          {{ errorMessage.studentIdControl[1].message }}
+        </mat-error>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field [hideRequiredMarker]="true">
         <mat-label>Materia</mat-label>
         <input
           type="text"
           matInput
+          placeholder="Seleccione una materia"
           formControlName="subjectGroup"
           [matAutocomplete]="autoGroup"
           required
@@ -49,9 +76,21 @@
           </mat-optgroup>
         </mat-autocomplete>
         <mat-error
-          *ngIf="this.firstStepForm.controls['subjectGroup'].invalid"
-          >{{ getErrorMessage("subjectGroup") }}</mat-error
+          *ngIf="
+            this.firstStepForm.controls['subjectGroup'].hasError('pattern') &&
+            showError('subjectGroup', 'pattern')
+          "
         >
+          {{ errorMessage.subjectGroupControl[0].message }}
+        </mat-error>
+        <mat-error
+          *ngIf="
+            this.firstStepForm.controls['subjectGroup'].hasError('required') &&
+            showError('subjectGroup', 'required')
+          "
+        >
+          {{ errorMessage.subjectGroupControl[1].message }}
+        </mat-error>
       </mat-form-field>
 
       <div>
