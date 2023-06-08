@@ -1,11 +1,12 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
+import { NgFor, AsyncPipe, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {
@@ -19,10 +20,10 @@ import {
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { NgFor, AsyncPipe } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { NgIf } from '@angular/common';
 import { GroupSubject } from 'src/app/pages/interface/groupSubject.interface';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { ScannerComponent } from 'src/app/pages/content/request/scanner/scanner.component';
 
 export const _filter = (opt: string[], value: string): string[] => {
   const filterValue = value.toLowerCase();
@@ -57,6 +58,7 @@ export function RequireMatch(groupSubjects: GroupSubject[]): ValidatorFn {
   ],
   standalone: true,
   imports: [
+    ZXingScannerModule,
     MatAutocompleteModule,
     NgFor,
     AsyncPipe,
@@ -71,6 +73,7 @@ export function RequireMatch(groupSubjects: GroupSubject[]): ValidatorFn {
     MatDatepickerModule,
     MatNativeDateModule,
     NgIf,
+    ScannerComponent,
   ],
 })
 export class RequestComponent implements OnInit {

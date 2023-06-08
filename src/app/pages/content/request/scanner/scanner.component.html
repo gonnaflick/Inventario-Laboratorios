@@ -1,1 +1,16 @@
-<p>scanner works!</p>
+<div id="qr-scanner" class="success" style="overflow: hidden">
+  <zxing-scanner
+    [enable]="scannerEnabled"
+    [device]="myDevice"
+    (camerasFound)="camerasFoundHandler($event)"
+    (scanSuccess)="scanSuccessHandler($event)"
+  ></zxing-scanner>
+  <div>
+    <p>Camara:</p>
+    <select #selectList (change)="selectCamera(selectList.value)">
+      <option *ngFor="let camera of cameras" value="{{ camera.label }}">
+        {{ camera.label }}
+      </option>
+    </select>
+  </div>
+</div>
