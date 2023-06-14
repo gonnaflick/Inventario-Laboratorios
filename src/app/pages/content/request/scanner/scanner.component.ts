@@ -4,6 +4,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-scanner',
@@ -16,6 +19,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatFormFieldModule,
     MatProgressSpinnerModule,
     CommonModule,
+    MatSnackBarModule,
+    MatDialogModule,
   ],
 })
 export class ScannerComponent implements OnInit, OnDestroy {
@@ -30,12 +35,26 @@ export class ScannerComponent implements OnInit, OnDestroy {
 
   scannerEnabled = false;
 
+  constructor(private _snackBar: MatSnackBar, public dialog: MatDialog) {}
+
+  openDialog() {
+    const dialogRef = this.dialog.open(DialogPermissionNull);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
   ngOnInit() {
     this.setupCameraDetection();
   }
 
   ngOnDestroy() {
     this.cleanupCameraDetection();
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action);
   }
 
   private setupCameraDetection() {
@@ -95,7 +114,14 @@ export class ScannerComponent implements OnInit, OnDestroy {
 
   onHasPermission(has: boolean) {
     this.hasPermission = has;
-    console.log(has);
+    if (has === false) {
+      this.openSnackBar(
+        'Denegaste los permisos de cámara, vuelve a intentarlo.',
+        'Aceptar'
+      );
+    } else if (has === null && this.hasDevices === null) {
+      this.openDialog();
+    }
   }
 
   camerasNotFoundHandler() {
@@ -124,3 +150,11 @@ export class ScannerComponent implements OnInit, OnDestroy {
     return this.cameraLabels[camera.deviceId];
   }
 }
+
+@Component({
+  selector: 'permission-null-dialog',
+  templateUrl: 'permission-null.html',
+  standalone: true,
+  imports: [MatDialogModule, MatButtonModule],
+})
+export class DialogPermissionNull {}

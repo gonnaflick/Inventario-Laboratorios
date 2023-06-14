@@ -4,9 +4,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RequestComponent } from './pages/content/request/request.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FirstPanelComponent } from './pages/content/request/first-panel/first-panel.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, FirstPanelComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

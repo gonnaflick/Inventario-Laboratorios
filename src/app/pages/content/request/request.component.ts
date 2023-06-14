@@ -24,8 +24,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { GroupSubject } from 'src/app/pages/interface/groupSubject.interface';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { ScannerComponent } from 'src/app/pages/content/request/scanner/scanner.component';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { Inject } from '@angular/core';
+import { MatDividerModule } from '@angular/material/divider';
 
 export const _filter = (opt: string[], value: string): string[] => {
   const filterValue = value.toLowerCase();
@@ -76,6 +75,7 @@ export function RequireMatch(groupSubjects: GroupSubject[]): ValidatorFn {
     MatNativeDateModule,
     NgIf,
     ScannerComponent,
+    MatDividerModule,
   ],
 })
 export class RequestComponent implements OnInit {
