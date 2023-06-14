@@ -24,6 +24,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { GroupSubject } from 'src/app/pages/interface/groupSubject.interface';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { ScannerComponent } from 'src/app/pages/content/request/scanner/scanner.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { Inject } from '@angular/core';
 
 export const _filter = (opt: string[], value: string): string[] => {
   const filterValue = value.toLowerCase();
@@ -101,18 +103,17 @@ export class RequestComponent implements OnInit {
       Validators.required,
       Validators.pattern('^[0-9]{6,6}$'),
     ]),
-    qrSignature: new FormControl('', Validators.required),
+    date: new FormControl('', [Validators.required]),
     subjectGroup: new FormControl('', [
       RequireMatch(this.groupSubjects),
       Validators.required,
     ]),
+    qrSignature: new FormControl('', Validators.required),
   });
 
   secondFormGroup = this._formBuilder.group({
     secondCtrl: ['', Validators.required],
   });
-
-  panels: { id: number }[] = [{ id: 1 }];
 
   constructor(private _formBuilder: FormBuilder) {}
 
@@ -151,10 +152,6 @@ export class RequestComponent implements OnInit {
     return controlErrors && controlErrors[errorType];
   }
 
-  /*-----------------------*/
-  /*FILTRO Y AUTOCOMPLETADO*/
-  /*-----------------------*/
-
   private _filterGroup(value: string): GroupSubject[] {
     if (value) {
       return this.groupSubjects
@@ -166,24 +163,5 @@ export class RequestComponent implements OnInit {
     }
 
     return this.groupSubjects;
-  }
-
-  /*-----*/
-  /*PANEL*/
-  /*-----*/
-
-  agregarPanel() {
-    const nuevoPanel = { id: this.panels.length + 1 };
-    this.panels.push(nuevoPanel);
-  }
-
-  eliminarPanel(index: number) {
-    if (this.panels.length > 1) {
-      this.panels.splice(index, 1);
-    }
-  }
-
-  trackByFn(index: number, item: { id: number }) {
-    return item.id;
   }
 }

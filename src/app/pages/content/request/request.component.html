@@ -1,4 +1,4 @@
-<mat-stepper labelPosition="bottom" #stepper>
+<mat-stepper labelPosition="end" #stepper>
   <mat-step [stepControl]="firstStepForm">
     <form [formGroup]="firstStepForm">
       <ng-template matStepLabel>Información del solicitante</ng-template>
@@ -54,6 +54,7 @@
           {{ errorMessage.studentIdControl[1].message }}
         </mat-error>
       </mat-form-field>
+
       <mat-form-field [hideRequiredMarker]="true">
         <mat-label>Materia</mat-label>
         <input
@@ -64,6 +65,7 @@
           [matAutocomplete]="autoGroup"
           required
         />
+        <mat-icon matSuffix>arrow_drop_down</mat-icon>
         <mat-autocomplete #autoGroup="matAutocomplete">
           <mat-optgroup
             style="font-weight: bold"
@@ -98,10 +100,15 @@
           <app-scanner></app-scanner>
         </div>
 
+        <button mat-stroked-button class=".test-button">
+          Escaneo de QR
+          <mat-icon matSuffix>qr_code_scanner</mat-icon>
+        </button>
+
         <button
           (click)="submitSignature()"
           mat-flat-button
-          color="primary"
+          color="accent"
           matStepperNext
         >
           Siguiente
@@ -112,58 +119,6 @@
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Equipo a solicitar</ng-template>
-
-      <mat-accordion class="example-headers-align">
-        <mat-expansion-panel *ngFor="let panel of panels; trackBy: trackByFn">
-          <mat-expansion-panel-header>
-            <mat-panel-title> Equipo #{{ panel.id }} </mat-panel-title>
-            <mat-panel-description>
-              Al chile luego le pongo algo pq no me muevo rico
-              <mat-icon>account_circle</mat-icon>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-
-          <mat-form-field>
-            <mat-label>Nombre del equipo</mat-label>
-            <input matInput />
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Cantidad</mat-label>
-            <input matInput type="number" min="1" />
-          </mat-form-field>
-
-          <button mat-button color="warn" (click)="agregarPanel()">
-            Futuro boton para eliminar
-          </button>
-          <button mat-button color="primary" (click)="agregarPanel()">
-            Futuro boton para no se algo
-          </button>
-        </mat-expansion-panel>
-      </mat-accordion>
-
-      <button mat-button color="primary" (click)="agregarPanel()">
-        Agregar panel
-      </button>
-
-      <div>
-        <button
-          mat-flat-button
-          color="primary"
-          matStepperPrevious
-          style="margin: 10px"
-        >
-          Atras
-        </button>
-        <button
-          mat-flat-button
-          color="primary"
-          matStepperNext
-          style="margin: 10px"
-        >
-          Siguiente
-        </button>
-      </div>
     </form>
   </mat-step>
   <mat-step>

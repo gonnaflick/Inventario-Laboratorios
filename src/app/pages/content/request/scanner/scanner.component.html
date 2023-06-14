@@ -1,16 +1,47 @@
-<div id="qr-scanner" class="success" style="overflow: hidden">
+<ng-container>
+  <select
+    *ngIf="hasPermission === true"
+    #list
+    (change)="onCameraSelectChange(list.value)"
+  >
+    <option value="" [selected]="!currentCamera">Camara desactivada</option>
+    <option
+      *ngFor="let camera of availableCameras"
+      [value]="camera.deviceId"
+      [selected]="currentCamera && camera.deviceId === currentCamera.deviceId"
+    >
+      {{ getCameraLabel(camera) }}
+    </option>
+  </select>
   <zxing-scanner
-    [enable]="scannerEnabled"
-    [device]="myDevice"
-    (camerasFound)="camerasFoundHandler($event)"
+    [(device)]="currentCamera"
     (scanSuccess)="scanSuccessHandler($event)"
+    (permissionResponse)="onHasPermission($event)"
+    (camerasNotFound)="camerasNotFoundHandler()"
   ></zxing-scanner>
-  <div>
-    <p>Camara:</p>
-    <select #selectList (change)="selectCamera(selectList.value)">
-      <option *ngFor="let camera of cameras" value="{{ camera.label }}">
-        {{ camera.label }}
-      </option>
-    </select>
-  </div>
-</div>
+</ng-container>
+
+<ng-container *ngIf="hasPermission === undefined">
+  <h2>Waiting for permissions.</h2>
+
+  <blockquote>
+    If your device does not have cameras, no permissions will be asked.
+  </blockquote>
+  <mat-spinner></mat-spinner>
+</ng-container>
+
+<ng-container *ngIf="hasPermission === false">
+  <h2>You denied the camera permission.</h2>
+</ng-container>
+
+<ng-container *ngIf="hasDevices === undefined">
+  <h2>Couldn't check for devices.</h2>
+
+  <blockquote>This may be caused by some security error.</blockquote>
+</ng-container>
+
+<ng-container *ngIf="hasDevices === false">
+  <h2>No devices were found.</h2>
+
+  <blockquote>No media devices dettected.</blockquote>
+</ng-container>
