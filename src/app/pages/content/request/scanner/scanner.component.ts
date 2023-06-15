@@ -1,10 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { CommonModule } from '@angular/common';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -12,16 +7,6 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-scanner',
   templateUrl: './scanner.component.html',
   styleUrls: ['./scanner.component.css'],
-  standalone: true,
-  imports: [
-    ZXingScannerModule,
-    MatSelectModule,
-    MatFormFieldModule,
-    MatProgressSpinnerModule,
-    CommonModule,
-    MatSnackBarModule,
-    MatDialogModule,
-  ],
 })
 export class ScannerComponent implements OnInit, OnDestroy {
   private qrSignature?: string;

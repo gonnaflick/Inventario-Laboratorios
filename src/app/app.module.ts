@@ -1,20 +1,61 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { RequestComponent } from './pages/content/request/request.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FirstPanelComponent } from './pages/content/request/first-panel/first-panel.component';
+import { MatButtonModule } from '@angular/material/button';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatStepperModule } from '@angular/material/stepper';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ScannerComponent } from './pages/content/request/scanner/scanner.component';
+import { RequestComponent } from './pages/content/request/request.component';
+import { MatIconModule } from '@angular/material/icon';
+import { FormService } from './pages/services/form-service.service';
 
 @NgModule({
-  declarations: [AppComponent, FirstPanelComponent],
+  declarations: [
+    AppComponent,
+    RequestComponent,
+    FirstPanelComponent,
+    ScannerComponent,
+  ],
   imports: [
     BrowserModule,
+    MatIconModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    RequestComponent,
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatAutocompleteModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    MatStepperModule,
+    MatExpansionModule,
+    MatButtonModule,
+    MatInputModule,
+    ZXingScannerModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatProgressSpinnerModule,
+    CommonModule,
+    MatSnackBarModule,
+    MatDialogModule,
+    MatSnackBarModule,
   ],
-  providers: [],
+  providers: [FormService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

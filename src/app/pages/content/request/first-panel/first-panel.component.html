@@ -1,1 +1,113 @@
-<p>first-panel works!</p>
+<form [formGroup]="firstStepForm">
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label>Nombre</mat-label>
+    <input
+      matInput
+      placeholder="Nombre y apellido"
+      formControlName="name"
+      maxlength="50"
+      required
+    />
+    <mat-error
+      *ngIf="
+        this.firstStepForm.controls['name'].hasError('pattern') &&
+        showError('name', 'pattern')
+      "
+    >
+      {{ errorMessage.nameControl[0].message }}
+    </mat-error>
+    <mat-error
+      *ngIf="
+        this.firstStepForm.controls['name'].hasError('required') &&
+        showError('name', 'required')
+      "
+    >
+      {{ errorMessage.nameControl[1].message }}
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label>Matricula</mat-label>
+    <input
+      matInput
+      placeholder="Ej. 338906"
+      formControlName="studentId"
+      maxlength="6"
+      required
+    />
+    <mat-error
+      *ngIf="
+        this.firstStepForm.controls['studentId'].hasError('pattern') &&
+        showError('studentId', 'pattern')
+      "
+    >
+      {{ errorMessage.studentIdControl[0].message }}
+    </mat-error>
+    <mat-error
+      *ngIf="
+        this.firstStepForm.controls['studentId'].hasError('required') &&
+        showError('studentId', 'required')
+      "
+    >
+      {{ errorMessage.studentIdControl[1].message }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field [hideRequiredMarker]="true">
+    <mat-label>Materia</mat-label>
+    <input
+      type="text"
+      matInput
+      placeholder="Seleccione una materia"
+      formControlName="subjectGroup"
+      [matAutocomplete]="autoGroup"
+      required
+    />
+    <mat-icon matSuffix>arrow_drop_down</mat-icon>
+    <mat-autocomplete #autoGroup="matAutocomplete">
+      <mat-optgroup
+        style="font-weight: bold"
+        *ngFor="let group of filteredOptions | async"
+        [label]="group.group"
+      >
+        <mat-option *ngFor="let group of group.subjects" [value]="group">
+          {{ group }}
+        </mat-option>
+      </mat-optgroup>
+    </mat-autocomplete>
+    <mat-error
+      *ngIf="
+        this.firstStepForm.controls['subjectGroup'].hasError('pattern') &&
+        showError('subjectGroup', 'pattern')
+      "
+    >
+      {{ errorMessage.subjectGroupControl[0].message }}
+    </mat-error>
+    <mat-error
+      *ngIf="
+        this.firstStepForm.controls['subjectGroup'].hasError('required') &&
+        showError('subjectGroup', 'required')
+      "
+    >
+      {{ errorMessage.subjectGroupControl[1].message }}
+    </mat-error>
+  </mat-form-field>
+  <div>
+    <div style="width: 50%">
+      <app-scanner></app-scanner>
+    </div>
+
+    <button mat-stroked-button class=".test-button">
+      Escaneo de QR
+      <mat-icon matSuffix>qr_code_scanner</mat-icon>
+    </button>
+
+    <button
+      (click)="submitSignature()"
+      mat-flat-button
+      color="accent"
+      matStepperNext
+    >
+      Siguiente
+    </button>
+  </div>
+</form>
