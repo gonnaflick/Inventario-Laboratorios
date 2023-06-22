@@ -21,7 +21,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ScannerComponent } from './pages/content/request/scanner/scanner.component';
 import { RequestComponent } from './pages/content/request/request.component';
 import { MatIconModule } from '@angular/material/icon';
-import { FormService } from './pages/services/form-service.service';
+import { FormService } from './pages/services/form.service';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatChipsModule } from '@angular/material/chips';
+import { CdkStepperModule } from '@angular/cdk/stepper';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @NgModule({
   declarations: [
@@ -32,7 +36,10 @@ import { FormService } from './pages/services/form-service.service';
   ],
   imports: [
     BrowserModule,
+    CdkStepperModule,
+    MatChipsModule,
     MatIconModule,
+    MatGridListModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
@@ -55,7 +62,13 @@ import { FormService } from './pages/services/form-service.service';
     MatDialogModule,
     MatSnackBarModule,
   ],
-  providers: [FormService],
+  providers: [
+    FormService,
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false },
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,5 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -20,10 +24,13 @@ export class ScannerComponent implements OnInit, OnDestroy {
 
   scannerEnabled = false;
 
+  horizontalPosition: MatSnackBarHorizontalPosition = 'start';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+
   constructor(private _snackBar: MatSnackBar, public dialog: MatDialog) {}
 
-  openDialog() {
-    const dialogRef = this.dialog.open(DialogPermissionNull);
+  openDialog(htmlDialog: any) {
+    const dialogRef = this.dialog.open(htmlDialog);
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log(`Dialog result: ${result}`);
@@ -39,7 +46,10 @@ export class ScannerComponent implements OnInit, OnDestroy {
   }
 
   openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action);
+    this._snackBar.open(message, action, {
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
   }
 
   private setupCameraDetection() {
@@ -100,22 +110,33 @@ export class ScannerComponent implements OnInit, OnDestroy {
   onHasPermission(has: boolean) {
     this.hasPermission = has;
     if (has === false) {
+      this.openDialog(DialogPermissionFalse);
+    } else if (has === true) {
       this.openSnackBar(
-        'Denegaste los permisos de cámara, vuelve a intentarlo.',
-        'Aceptar'
+        'Escanee el codigo QR de la credencial virtual del alumno',
+        'Cerrar'
       );
     } else if (has === null && this.hasDevices === null) {
-      this.openDialog();
+      this.openDialog(DialogPermissionNull);
     }
   }
 
-  camerasNotFoundHandler() {
-    console.log('No cameras found.');
+  onHasDevices(has: boolean) {
+    this.hasDevices = has;
+    if (has === false) {
+      this.openDialog(DialogDeviceFalse);
+    } else if (has == undefined && this.hasPermission === null) {
+      this.openDialog(DialogDeviceUndetermined);
+    }
   }
 
   onCameraSelectChange(selected: string) {
     const camera = this.availableCameras?.find((x) => x.deviceId === selected);
     this.currentCamera = camera || undefined;
+  }
+
+  getCameraLabel(camera: MediaDeviceInfo): string {
+    return this.cameraLabels[camera.deviceId];
   }
 
   checkSignature() {
@@ -130,16 +151,36 @@ export class ScannerComponent implements OnInit, OnDestroy {
       document.getElementById('qr-scanner')?.setAttribute('class', 'error');
     }, 1000);
   }
-
-  getCameraLabel(camera: MediaDeviceInfo): string {
-    return this.cameraLabels[camera.deviceId];
-  }
 }
 
 @Component({
   selector: 'permission-null-dialog',
-  templateUrl: 'permission-null.html',
+  templateUrl: './dialog/permission-null.html',
   standalone: true,
   imports: [MatDialogModule, MatButtonModule],
 })
 export class DialogPermissionNull {}
+
+@Component({
+  selector: 'permission-false-dialog',
+  templateUrl: './dialog/permission-false.html',
+  standalone: true,
+  imports: [MatDialogModule, MatButtonModule],
+})
+export class DialogPermissionFalse {}
+
+@Component({
+  selector: 'permission-null-dialog',
+  templateUrl: './dialog/device-undetermined.html',
+  standalone: true,
+  imports: [MatDialogModule, MatButtonModule],
+})
+export class DialogDeviceUndetermined {}
+
+@Component({
+  selector: 'permission-null-dialog',
+  templateUrl: './dialog/device-false.html',
+  standalone: true,
+  imports: [MatDialogModule, MatButtonModule],
+})
+export class DialogDeviceFalse {}

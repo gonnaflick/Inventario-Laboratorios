@@ -1,48 +1,33 @@
-<ng-container>
-  <select
-    *ngIf="hasPermission === true"
-    #list
-    (change)="onCameraSelectChange(list.value)"
-  >
-    <option value="" [selected]="!currentCamera">Camara desactivada</option>
-    <option
-      *ngFor="let camera of availableCameras"
-      [value]="camera.deviceId"
-      [selected]="currentCamera && camera.deviceId === currentCamera.deviceId"
-    >
-      {{ getCameraLabel(camera) }}
-    </option>
-  </select>
+<div class="scanner-container">
+  <div class="scan-square"></div>
   <zxing-scanner
     [(device)]="currentCamera"
     (scanSuccess)="scanSuccessHandler($event)"
     (permissionResponse)="onHasPermission($event)"
-    (camerasNotFound)="camerasNotFoundHandler()"
-  ></zxing-scanner>
-</ng-container>
+    (hasDevices)="onHasDevices($event)"
+    class="scan-video"
+  >
+  </zxing-scanner>
+</div>
+
+<select
+  *ngIf="hasPermission === true"
+  #list
+  (change)="onCameraSelectChange(list.value)"
+>
+  <option value="" [selected]="!currentCamera">Camara desactivada</option>
+  <option
+    *ngFor="let camera of availableCameras"
+    [value]="camera.deviceId"
+    [selected]="currentCamera && camera.deviceId === currentCamera.deviceId"
+  >
+    {{ getCameraLabel(camera) }}
+  </option>
+</select>
 
 <ng-container *ngIf="hasPermission === undefined">
-  <h2>Waiting for permissions.</h2>
-
-  <blockquote>
-    If your device does not have cameras, no permissions will be asked.
-  </blockquote>
+  <h2>Solicitud de permisos</h2>
+  <p>Se requiere acceso a la cámara para utilizar el escáner.</p>
+  <p>Haz clic en "Aceptar" para permitir el acceso a la cámara.</p>
   <mat-spinner></mat-spinner>
-</ng-container>
-
-<ng-container *ngIf="hasDevices === undefined">
-  <h2>Fallo al revisar los dispositivos.</h2>
-
-  <blockquote>
-    Esto puede ocurrir por un error de seguridad, verifique sus dispositivos.
-  </blockquote>
-</ng-container>
-
-<ng-container
-  *ngIf="hasDevices === false"
-  style="border-radius: 10px; background-color: blueviolet"
->
-  <h2>No se encontraron dispositivos.</h2>
-
-  <blockquote>Conecte un dispositivo para continuar.</blockquote>
 </ng-container>

@@ -2,6 +2,11 @@
 
 @include mat-core();
 
+$success: #35a255 !default;
+$primary: #007cbb !default;
+
+//linear-gradient(to right,#00aef8,#00628c);
+// accent #d5a521
 $md-primary: (
   50: #eee0f1,
   100: #d4b3db,
@@ -78,10 +83,25 @@ $github-theme: mat-light-theme(
   $github-theme-warn
 );
 
-@mixin color($theme) {
-  .test-button {
-    color: #410058;
+.mat-step-header .mat-step-icon-state-done,
+.mat-step-header .mat-step-icon-state-edit {
+  background-color: $success !important;
+  color: $success;
+  + .mat-step-label {
+    color: $success !important;
   }
+}
+
+.mat-step-header .mat-step-icon-selected {
+  background-color: $primary !important;
+  color: $primary;
+  + .mat-step-label {
+    color: $primary !important;
+  }
+}
+
+.mat-horizontal-stepper-header {
+  pointer-events: none;
 }
 
 @include angular-material-theme($github-theme);

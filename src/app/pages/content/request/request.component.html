@@ -1,14 +1,44 @@
-<mat-stepper labelPosition="end" #stepper>
-  <mat-step [stepControl]="firstStepForm">
-    <ng-template matStepLabel>Información del solicitante</ng-template>
-    <app-first-panel></app-first-panel
-  ></mat-step>
-  <mat-step>
-    <ng-template matStepLabel>Resumen y confirmación</ng-template>
-    <p>You are now done.</p>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
-    </div>
-  </mat-step>
-</mat-stepper>
+<div class="container">
+  <div class="stepper">
+    <mat-vertical-stepper labelPosition="bottom" #stepper [linear]="true">
+      <mat-step [stepControl]="firstStepForm" [completed]="isFormValid">
+        <ng-template matStepLabel>
+          <div>Paso 1</div>
+          <div>Datos del solicitante</div>
+        </ng-template>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>
+          <div>Paso 2</div>
+          <div>Verificación por QR</div>
+        </ng-template>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>
+          <div>Paso 3</div>
+          <div>Selección de equipo</div>
+        </ng-template>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>
+          <div>Paso 4</div>
+          <div>Resumen y confirmación</div>
+          <span>En progreso</span>
+        </ng-template>
+      </mat-step>
+    </mat-vertical-stepper>
+  </div>
+
+  <div class="content">
+    <ng-container *ngIf="stepper.selectedIndex === 0">
+      <app-first-panel (formValid)="handleFormValid($event)"></app-first-panel>
+    </ng-container>
+    <ng-container *ngIf="stepper.selectedIndex === 1">
+      <app-scanner></app-scanner>
+    </ng-container>
+    <!-- Agrega más ng-container para los otros pasos con su respectivo contenido -->
+  </div>
+</div>

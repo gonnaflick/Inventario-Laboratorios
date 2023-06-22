@@ -10,7 +10,7 @@
     />
     <mat-error
       *ngIf="
-        this.firstStepForm.controls['name'].hasError('pattern') &&
+        firstStepForm.controls['name'].hasError('pattern') &&
         showError('name', 'pattern')
       "
     >
@@ -18,13 +18,14 @@
     </mat-error>
     <mat-error
       *ngIf="
-        this.firstStepForm.controls['name'].hasError('required') &&
+        firstStepForm.controls['name'].hasError('required') &&
         showError('name', 'required')
       "
     >
       {{ errorMessage.nameControl[1].message }}
     </mat-error>
   </mat-form-field>
+
   <mat-form-field [hideRequiredMarker]="true">
     <mat-label>Matricula</mat-label>
     <input
@@ -36,7 +37,7 @@
     />
     <mat-error
       *ngIf="
-        this.firstStepForm.controls['studentId'].hasError('pattern') &&
+        firstStepForm.controls['studentId'].hasError('pattern') &&
         showError('studentId', 'pattern')
       "
     >
@@ -44,7 +45,7 @@
     </mat-error>
     <mat-error
       *ngIf="
-        this.firstStepForm.controls['studentId'].hasError('required') &&
+        firstStepForm.controls['studentId'].hasError('required') &&
         showError('studentId', 'required')
       "
     >
@@ -91,23 +92,12 @@
       {{ errorMessage.subjectGroupControl[1].message }}
     </mat-error>
   </mat-form-field>
-  <div>
-    <div style="width: 50%">
-      <app-scanner></app-scanner>
-    </div>
-
-    <button mat-stroked-button class=".test-button">
-      Escaneo de QR
-      <mat-icon matSuffix>qr_code_scanner</mat-icon>
-    </button>
-
-    <button
-      (click)="submitSignature()"
-      mat-flat-button
-      color="accent"
-      matStepperNext
-    >
-      Siguiente
-    </button>
-  </div>
+  <button
+    mat-flat-button
+    color="accent"
+    style="color: white"
+    (click)="submitForm()"
+  >
+    Siguiente
+  </button>
 </form>

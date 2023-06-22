@@ -38,7 +38,6 @@ export class FormService {
       this.requireMatch(this.groupSubjects),
       Validators.required,
     ]),
-    qrSignature: new FormControl('', Validators.required),
   });
 
   constructor(private _formBuilder: FormBuilder) {}

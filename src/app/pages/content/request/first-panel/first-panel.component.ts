@@ -1,22 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { map, startWith } from 'rxjs/operators';
 import { GroupSubject } from 'src/app/pages/interface/groupSubject.interface';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { FormService } from 'src/app/pages/services/form-service.service';
+import { FormService } from 'src/app/pages/services/form.service';
 import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-first-panel',
   templateUrl: './first-panel.component.html',
   styleUrls: ['./first-panel.component.css'],
-  providers: [
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { displayDefaultIndicatorType: false },
-    },
-  ],
 })
 export class FirstPanelComponent implements OnInit {
+  @Output() formValid = new EventEmitter<boolean>();
+
   public firstStepForm: FormGroup;
   filteredOptions: any;
 
@@ -48,12 +43,6 @@ export class FirstPanelComponent implements OnInit {
       );
   }
 
-  submitSignature(): void {
-    /*TEMPORAL, DEBE INCLUIR EL ESCANEO QR Y GUARDAR EL LINK DEL USUARIO, ESTO ES LO QUE SE VALIDA*/
-    this.firstStepForm.get('qrSignature')?.setValue('true');
-    console.log('true');
-  }
-
   showError(controlName: string, errorType: string): boolean {
     const controlErrors = this.firstStepForm.get(controlName)?.errors;
     return controlErrors && controlErrors[errorType];
@@ -70,5 +59,11 @@ export class FirstPanelComponent implements OnInit {
     }
 
     return this.formService.groupSubjects;
+  }
+
+  submitForm() {
+    if (this.firstStepForm.valid) {
+      this.formValid.emit(true); // Emitir evento formValid
+    }
   }
 }
