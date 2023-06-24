@@ -1,107 +1,15 @@
 @import "@angular/material/theming";
 
 @include mat-core();
+$primary: darken(#428bca, 6.5%);
+$success: #0aa699;
+$info: #1f3853;
+$warning: #fbb05e;
+$danger: #f35958;
+$grey: #d1dade;
 
-$success: #35a255 !default;
-$primary: #007cbb !default;
+//$success: #35a255 !default;
+///$primary: #007cbb !default;
 
 //linear-gradient(to right,#00aef8,#00628c);
 // accent #d5a521
-$md-primary: (
-  50: #eee0f1,
-  100: #d4b3db,
-  200: #b880c4,
-  300: #9b4dac,
-  400: #85269a,
-  500: #700088,
-  600: #680080,
-  700: #5d0075,
-  800: #53006b,
-  900: #410058,
-  A100: #da8aff,
-  A200: #c957ff,
-  A400: #b924ff,
-  A700: #b10aff,
-  contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #ffffff,
-    400: #ffffff,
-    500: #ffffff,
-    600: #ffffff,
-    700: #ffffff,
-    800: #ffffff,
-    900: #ffffff,
-    A100: #000000,
-    A200: #000000,
-    A400: #ffffff,
-    A700: #ffffff,
-  ),
-);
-
-$md-accent: (
-  50: #faf4e4,
-  100: #f2e4bc,
-  200: #ead290,
-  300: #e2c064,
-  400: #dbb342,
-  500: #d5a521,
-  600: #d09d1d,
-  700: #ca9318,
-  800: #c48a14,
-  900: #ba790b,
-  A100: #fff5e6,
-  A200: #ffe0b3,
-  A400: #ffcb80,
-  A700: #ffc167,
-  contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #000000,
-    400: #000000,
-    500: #000000,
-    600: #000000,
-    700: #000000,
-    800: #000000,
-    900: #ffffff,
-    A100: #000000,
-    A200: #000000,
-    A400: #000000,
-    A700: #000000,
-  ),
-);
-
-$github-theme-primary: mat-palette($md-primary);
-$github-theme-accent: mat-palette($md-accent);
-$github-theme-warn: mat-palette($mat-red);
-
-$github-theme: mat-light-theme(
-  $github-theme-primary,
-  $github-theme-accent,
-  $github-theme-warn
-);
-
-.mat-step-header .mat-step-icon-state-done,
-.mat-step-header .mat-step-icon-state-edit {
-  background-color: $success !important;
-  color: $success;
-  + .mat-step-label {
-    color: $success !important;
-  }
-}
-
-.mat-step-header .mat-step-icon-selected {
-  background-color: $primary !important;
-  color: $primary;
-  + .mat-step-label {
-    color: $primary !important;
-  }
-}
-
-.mat-horizontal-stepper-header {
-  pointer-events: none;
-}
-
-@include angular-material-theme($github-theme);
