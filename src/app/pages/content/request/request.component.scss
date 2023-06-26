@@ -1,0 +1,155 @@
+@import "/src/theme.scss";
+
+.container {
+  display: flex;
+  align-items: center;
+  font-family: "Montserrat", sans-serif;
+}
+
+.stepper {
+  width: 350px;
+  margin-right: 20px;
+}
+
+.content {
+  flex: 1 1 auto;
+}
+
+.step-buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.step-button {
+  display: flex;
+  align-items: flex-start;
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  color: $white;
+  margin-right: 30px;
+}
+
+.step-icon.success,
+.step-line.success {
+  background-color: $success;
+}
+
+.step-icon.edit,
+.step-line.edit {
+  background-color: $info;
+}
+
+.step-icon.in-progress {
+  background-color: $primary;
+}
+
+.step-icon.waiting {
+  background-color: $dark;
+}
+
+.step-icon.pending {
+  background-color: $secondary;
+}
+
+.step-icon-size {
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+}
+
+.step-labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+}
+
+.step-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.step-number {
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  color: $gray;
+  margin-bottom: 4px;
+}
+
+.step-status {
+  border: 1px solid $gray;
+  border-radius: 20px;
+  padding: 2px 8px 2px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: auto;
+}
+
+.step-status.success {
+  background-color: $success-light;
+  border: 1px solid $success-light;
+  color: $success;
+}
+
+.step-status.edit {
+  background-color: $info-light;
+  border: 1px solid $info-light;
+  color: $info;
+}
+
+.step-status.in-progress {
+  background-color: $primary-light;
+  border: 1px solid $primary-light;
+  color: $primary;
+}
+
+.step-status.waiting {
+  background-color: $dark-light;
+  border: 1px solid $dark-light;
+  color: $dark;
+}
+
+.step-status.pending {
+  background-color: $white;
+  border: 1px solid $secondary;
+  color: $secondary;
+}
+
+.step-line {
+  height: 40px;
+  width: 5px;
+  margin: 0 25px;
+  position: relative;
+  border-radius: 99px;
+}
+
+.step-line.in-progress {
+  background: linear-gradient(to bottom, $primary 40%, $secondary 60%);
+}
+
+.step-line.waiting {
+  background: linear-gradient(to bottom, $dark 40%, $secondary 60%);
+}
+
+.step-line.pending {
+  background: linear-gradient(to bottom, $secondary 50%, $secondary 50%);
+}

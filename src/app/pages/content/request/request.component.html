@@ -1,26 +1,36 @@
 <div class="container">
   <div class="stepper">
     <div class="step-buttons">
-      <button
-        *ngFor="let step of steps; let i = index"
-        class="step-button"
-        [ngClass]="{
-          active: selectedIndex === i,
-          completed: step.completed,
-          disabled: i !== 0 && !step.completed && !steps[i - 1].completed
-        }"
-        (click)="setStep(i)"
-      >
-        <div class="step-icon">
-          <mat-icon class="step-icon-size {{ step.animationClass }}">{{
-            step.icon
-          }}</mat-icon>
-        </div>
-        <div class="step-labels robotoFont">
-          <span class="step-number">PASO {{ i + 1 }}</span>
-          <span class="step-title">{{ step.label }}</span>
-        </div>
-      </button>
+      <ng-container *ngFor="let step of steps; let i = index">
+        <button
+          class="step-button"
+          [ngClass]="{
+            active: selectedIndex === i,
+            completed: step.completed,
+            disabled: i !== 0 && !step.completed && !steps[i - 1].completed
+          }"
+          (click)="setStep(i)"
+        >
+          <div class="step-icon" [ngClass]="getStepClass(step, 'icon')">
+            <mat-icon class="step-icon-size">{{ step.icon }}</mat-icon>
+          </div>
+          <div class="step-labels robotoFont">
+            <span class="step-number">PASO {{ i + 1 }}</span>
+            <span class="step-title">{{ step.label }}</span>
+          </div>
+          <span
+            class="step-status robotoFont"
+            [ngClass]="getStepClass(step, 'status')"
+          >
+            {{ stepStatusMessages[getStepStatus(step)] }}
+          </span>
+        </button>
+        <div
+          class="step-line"
+          *ngIf="i !== steps.length - 1"
+          [ngClass]="getStepClass(step, 'line')"
+        ></div>
+      </ng-container>
     </div>
   </div>
 
