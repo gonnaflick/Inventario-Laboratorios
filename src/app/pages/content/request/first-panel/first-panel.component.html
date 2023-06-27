@@ -26,7 +26,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field [hideRequiredMarker]="true">
+  <mat-form-field [hideRequiredMarker]="true" appearance="outline">
     <mat-label>Matricula</mat-label>
     <input
       matInput
@@ -92,12 +92,7 @@
       {{ errorMessage.subjectGroupControl[1].message }}
     </mat-error>
   </mat-form-field>
-  <button
-    mat-flat-button
-    color="accent"
-    style="color: white"
-    (click)="submitForm()"
-  >
+  <button mat-flat-button color="primary" (click)="submitForm()">
     Siguiente
   </button>
 </form>

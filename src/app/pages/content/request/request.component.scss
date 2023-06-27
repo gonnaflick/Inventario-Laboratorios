@@ -1,9 +1,8 @@
-@import "/src/theme.scss";
+@import "/src/styles.scss";
 
 .container {
   display: flex;
   align-items: center;
-  font-family: "Montserrat", sans-serif;
 }
 
 .stepper {
@@ -89,7 +88,6 @@
 
 .step-number {
   font-size: 12px;
-  letter-spacing: 0.5px;
   font-weight: 700;
   color: $gray;
   margin-bottom: 4px;
@@ -100,7 +98,7 @@
   border-radius: 20px;
   padding: 2px 8px 2px 8px;
   font-size: 12px;
-  font-weight: bold;
+  font-weight: 700;
   margin-left: auto;
 }
 

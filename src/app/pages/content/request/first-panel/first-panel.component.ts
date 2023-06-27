@@ -7,7 +7,7 @@ import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-first-panel',
   templateUrl: './first-panel.component.html',
-  styleUrls: ['./first-panel.component.css'],
+  styleUrls: ['./first-panel.component.scss'],
 })
 export class FirstPanelComponent implements OnInit {
   @Output() formValid = new EventEmitter<boolean>();

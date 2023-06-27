@@ -14,14 +14,11 @@
           <div class="step-icon" [ngClass]="getStepClass(step, 'icon')">
             <mat-icon class="step-icon-size">{{ step.icon }}</mat-icon>
           </div>
-          <div class="step-labels robotoFont">
+          <div class="step-labels">
             <span class="step-number">PASO {{ i + 1 }}</span>
             <span class="step-title">{{ step.label }}</span>
           </div>
-          <span
-            class="step-status robotoFont"
-            [ngClass]="getStepClass(step, 'status')"
-          >
+          <span class="step-status" [ngClass]="getStepClass(step, 'status')">
             {{ stepStatusMessages[getStepStatus(step)] }}
           </span>
         </button>
