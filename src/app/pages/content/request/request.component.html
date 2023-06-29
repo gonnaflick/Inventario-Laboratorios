@@ -15,10 +15,10 @@
             <mat-icon class="step-icon-size">{{ step.icon }}</mat-icon>
           </div>
           <div class="step-labels">
-            <span class="step-number">PASO {{ i + 1 }}</span>
+            <span class="step-number text-muted">PASO {{ i + 1 }}</span>
             <span class="step-title">{{ step.label }}</span>
           </div>
-          <span class="step-status" [ngClass]="getStepClass(step, 'status')">
+          <span [ngClass]="getStepClass(step, 'status')">
             {{ stepStatusMessages[getStepStatus(step)] }}
           </span>
         </button>
@@ -41,7 +41,7 @@
     </div>
     <div *ngIf="selectedIndex === 1">
       <div id="second-panel">
-        <app-scanner></app-scanner>
+        <app-second-panel></app-second-panel>
       </div>
     </div>
     <div *ngIf="selectedIndex === 2">SELECCIONA TU EQUIPO</div>

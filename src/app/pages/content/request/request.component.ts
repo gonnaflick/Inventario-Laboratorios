@@ -1,11 +1,5 @@
 import { Component } from '@angular/core';
-
-interface Step {
-  label: string;
-  originalIcon: string;
-  icon: string;
-  completed: boolean;
-}
+import { Step } from '../../interface/step.interface';
 
 @Component({
   selector: 'app-request',

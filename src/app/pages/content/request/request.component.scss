@@ -2,7 +2,6 @@
 
 .container {
   display: flex;
-  align-items: center;
 }
 
 .stepper {
@@ -53,7 +52,7 @@
 
 .step-icon.edit,
 .step-line.edit {
-  background-color: $info;
+  background-color: $dark;
 }
 
 .step-icon.in-progress {
@@ -61,7 +60,7 @@
 }
 
 .step-icon.waiting {
-  background-color: $dark;
+  background-color: $warning;
 }
 
 .step-icon.pending {
@@ -89,16 +88,14 @@
 .step-number {
   font-size: 12px;
   font-weight: 700;
-  color: $gray;
-  margin-bottom: 4px;
 }
 
 .step-status {
-  border: 1px solid $gray;
-  border-radius: 20px;
-  padding: 2px 8px 2px 8px;
   font-size: 12px;
   font-weight: 700;
+  border: 1px solid $gray;
+  border-radius: 20px;
+  padding: 0 8px 0 8px;
   margin-left: auto;
 }
 
@@ -109,9 +106,9 @@
 }
 
 .step-status.edit {
-  background-color: $info-light;
-  border: 1px solid $info-light;
-  color: $info;
+  background-color: $dark-light;
+  border: 1px solid $dark-light;
+  color: $dark;
 }
 
 .step-status.in-progress {
@@ -121,9 +118,9 @@
 }
 
 .step-status.waiting {
-  background-color: $dark-light;
-  border: 1px solid $dark-light;
-  color: $dark;
+  background-color: $warning-light;
+  border: 1px solid $warning-light;
+  color: $warning;
 }
 
 .step-status.pending {
@@ -145,7 +142,7 @@
 }
 
 .step-line.waiting {
-  background: linear-gradient(to bottom, $dark 40%, $secondary 60%);
+  background: linear-gradient(to bottom, $warning 40%, $secondary 60%);
 }
 
 .step-line.pending {

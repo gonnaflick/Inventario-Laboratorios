@@ -1,98 +1,145 @@
-<form [formGroup]="firstStepForm">
-  <mat-form-field [hideRequiredMarker]="true">
-    <mat-label>Nombre</mat-label>
-    <input
-      matInput
-      placeholder="Nombre y apellido"
-      formControlName="name"
-      maxlength="50"
-      required
-    />
-    <mat-error
-      *ngIf="
-        firstStepForm.controls['name'].hasError('pattern') &&
-        showError('name', 'pattern')
-      "
-    >
-      {{ errorMessage.nameControl[0].message }}
-    </mat-error>
-    <mat-error
-      *ngIf="
-        firstStepForm.controls['name'].hasError('required') &&
-        showError('name', 'required')
-      "
-    >
-      {{ errorMessage.nameControl[1].message }}
-    </mat-error>
-  </mat-form-field>
+<div class="row w-100 gy-4 mt-4">
+  <div
+    class="col-lg-5 col-md-12 d-flex flex-column align-items-left justify-content-left"
+  >
+    <form [formGroup]="firstStepForm" class="w-75">
+      <h4 class="fs-2 mb-2">Solicitante</h4>
+      <h5 class="fs-6 mb-4">Ingrese toda la información del solicitante</h5>
+      <div class="mb-3">
+        <label for="name" class="form-label">Nombre</label>
+        <input
+          formControlName="name"
+          maxlength="50"
+          placeholder="Nombre y apellido"
+          id="name"
+          required
+          class="form-control"
+        />
 
-  <mat-form-field [hideRequiredMarker]="true" appearance="outline">
-    <mat-label>Matricula</mat-label>
-    <input
-      matInput
-      placeholder="Ej. 338906"
-      formControlName="studentId"
-      maxlength="6"
-      required
-    />
-    <mat-error
-      *ngIf="
-        firstStepForm.controls['studentId'].hasError('pattern') &&
-        showError('studentId', 'pattern')
-      "
-    >
-      {{ errorMessage.studentIdControl[0].message }}
-    </mat-error>
-    <mat-error
-      *ngIf="
-        firstStepForm.controls['studentId'].hasError('required') &&
-        showError('studentId', 'required')
-      "
-    >
-      {{ errorMessage.studentIdControl[1].message }}
-    </mat-error>
-  </mat-form-field>
+        <small
+          *ngIf="
+            this.firstStepForm.controls['name'].hasError('pattern') &&
+            this.firstStepForm.controls['name'].touched &&
+            showError('name', 'pattern')
+          "
+          id="name-pattern-help"
+          class="form-text text-danger"
+        >
+          {{ errorMessage.nameControl[0].message }}
+        </small>
 
-  <mat-form-field [hideRequiredMarker]="true">
-    <mat-label>Materia</mat-label>
-    <input
-      type="text"
-      matInput
-      placeholder="Seleccione una materia"
-      formControlName="subjectGroup"
-      [matAutocomplete]="autoGroup"
-      required
-    />
-    <mat-icon matSuffix>arrow_drop_down</mat-icon>
-    <mat-autocomplete #autoGroup="matAutocomplete">
-      <mat-optgroup
-        style="font-weight: bold"
-        *ngFor="let group of filteredOptions | async"
-        [label]="group.group"
-      >
-        <mat-option *ngFor="let group of group.subjects" [value]="group">
-          {{ group }}
-        </mat-option>
-      </mat-optgroup>
-    </mat-autocomplete>
-    <mat-error
-      *ngIf="
-        this.firstStepForm.controls['subjectGroup'].hasError('pattern') &&
-        showError('subjectGroup', 'pattern')
-      "
-    >
-      {{ errorMessage.subjectGroupControl[0].message }}
-    </mat-error>
-    <mat-error
-      *ngIf="
-        this.firstStepForm.controls['subjectGroup'].hasError('required') &&
-        showError('subjectGroup', 'required')
-      "
-    >
-      {{ errorMessage.subjectGroupControl[1].message }}
-    </mat-error>
-  </mat-form-field>
-  <button mat-flat-button color="primary" (click)="submitForm()">
-    Siguiente
-  </button>
-</form>
+        <small
+          *ngIf="
+            this.firstStepForm.controls['name'].hasError('required') &&
+            this.firstStepForm.controls['name'].touched &&
+            showError('name', 'required')
+          "
+          id="name-required-help"
+          class="form-text text-danger"
+        >
+          {{ errorMessage.nameControl[1].message }}
+        </small>
+      </div>
+
+      <div class="mb-3">
+        <label for="studentId" class="form-label">Matricula</label>
+        <input
+          formControlName="studentId"
+          maxlength="6"
+          placeholder="Ej. 338906"
+          id="studentId"
+          required
+          class="form-control"
+        />
+
+        <small
+          *ngIf="
+            this.firstStepForm.controls['studentId'].hasError('pattern') &&
+            this.firstStepForm.controls['studentId'].touched &&
+            showError('studentId', 'pattern')
+          "
+          id="studentId-pattern-help"
+          class="form-text text-danger"
+        >
+          {{ errorMessage.studentIdControl[0].message }}
+        </small>
+
+        <small
+          *ngIf="
+            this.firstStepForm.controls['studentId'].hasError('required') &&
+            this.firstStepForm.controls['studentId'].touched &&
+            showError('studentId', 'required')
+          "
+          id="studentId-required-help"
+          class="form-text text-danger"
+        >
+          {{ errorMessage.studentIdControl[1].message }}
+        </small>
+      </div>
+
+      <div class="mb-3">
+        <label for="groupSubject" class="form-label">Materia</label>
+        <p-autoComplete
+          styleClass="input-autocomplete"
+          id="groupSubject"
+          formControlName="subjectGroup"
+          [group]="true"
+          [suggestions]="filteredGroups"
+          (completeMethod)="filterGroup($event)"
+          field="label"
+          [dropdown]="true"
+          [forceSelection]="true"
+          placeholder="Seleccione una materia"
+        >
+          <ng-template let-group pTemplate="group">
+            <span class="group-header">{{ group.label }}</span>
+          </ng-template>
+          <ng-template let-subject pTemplate="item">
+            <div class="d-flex flex-column">
+              <span class="subject-item">
+                {{ subject.label }}
+              </span>
+              <span class="subject-item">
+                {{ subject.label }}
+              </span>
+            </div>
+          </ng-template>
+        </p-autoComplete>
+
+        <small
+          *ngIf="
+            this.firstStepForm.controls['subjectGroup'].hasError('pattern') &&
+            this.firstStepForm.controls['subjectGroup'].touched &&
+            showError('subjectGroup', 'pattern')
+          "
+          id="subjectGroup-pattern-help"
+          class="p-error robotoFont"
+        >
+          {{ errorMessage.subjectGroupControl[0].message }}
+        </small>
+
+        <small
+          *ngIf="
+            this.firstStepForm.controls['subjectGroup'].hasError('required') &&
+            this.firstStepForm.controls['subjectGroup'].touched &&
+            showError('subjectGroup', 'required')
+          "
+          id="subjectGroup-required-help"
+          class="p-error robotoFont"
+        >
+          {{ errorMessage.subjectGroupControl[1].message }}
+        </small>
+      </div>
+
+      <div>
+        <button
+          class="btn btn-outline-primary"
+          type="button"
+          (click)="submitForm()"
+        >
+          Siguiente
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

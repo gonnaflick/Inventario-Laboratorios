@@ -1,18 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-scanner',
-  templateUrl: './scanner.component.html',
-  styleUrls: ['./scanner.component.css'],
+  selector: 'app-second-panel',
+  templateUrl: './second-panel.component.html',
+  styleUrls: ['./second-panel.component.css'],
 })
-export class ScannerComponent implements OnInit, OnDestroy {
+export class SecondPanelComponent implements OnInit, OnDestroy {
   private qrSignature?: string;
   private mediaDevices: MediaDeviceInfo[] = [];
   private cameraLabels: { [deviceId: string]: string } = {};
@@ -24,18 +17,7 @@ export class ScannerComponent implements OnInit, OnDestroy {
 
   scannerEnabled = false;
 
-  horizontalPosition: MatSnackBarHorizontalPosition = 'start';
-  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
-
-  constructor(private _snackBar: MatSnackBar, public dialog: MatDialog) {}
-
-  openDialog(htmlDialog: any) {
-    const dialogRef = this.dialog.open(htmlDialog);
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
+  constructor() {}
 
   ngOnInit() {
     this.setupCameraDetection();
@@ -43,13 +25,6 @@ export class ScannerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.cleanupCameraDetection();
-  }
-
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-    });
   }
 
   private setupCameraDetection() {
@@ -110,23 +85,20 @@ export class ScannerComponent implements OnInit, OnDestroy {
   onHasPermission(has: boolean) {
     this.hasPermission = has;
     if (has === false) {
-      this.openDialog(DialogPermissionFalse);
+      console.log('DialogPermissionFalse');
     } else if (has === true) {
-      this.openSnackBar(
-        'Escanee el codigo QR de la credencial virtual del alumno',
-        'Cerrar'
-      );
+      console.log('Escanee el codigo QR de la credencial virtual del alumno');
     } else if (has === null && this.hasDevices === null) {
-      this.openDialog(DialogPermissionNull);
+      console.log('DialogPermissionNull');
     }
   }
 
   onHasDevices(has: boolean) {
     this.hasDevices = has;
     if (has === false) {
-      this.openDialog(DialogDeviceFalse);
+      console.log('DialogDeviceFalse');
     } else if (has == undefined && this.hasPermission === null) {
-      this.openDialog(DialogDeviceUndetermined);
+      console.log('DialogDeviceUndetermined');
     }
   }
 
@@ -152,35 +124,3 @@ export class ScannerComponent implements OnInit, OnDestroy {
     }, 1000);
   }
 }
-
-@Component({
-  selector: 'permission-null-dialog',
-  templateUrl: './dialog/permission-null.html',
-  standalone: true,
-  imports: [MatDialogModule, MatButtonModule],
-})
-export class DialogPermissionNull {}
-
-@Component({
-  selector: 'permission-false-dialog',
-  templateUrl: './dialog/permission-false.html',
-  standalone: true,
-  imports: [MatDialogModule, MatButtonModule],
-})
-export class DialogPermissionFalse {}
-
-@Component({
-  selector: 'permission-null-dialog',
-  templateUrl: './dialog/device-undetermined.html',
-  standalone: true,
-  imports: [MatDialogModule, MatButtonModule],
-})
-export class DialogDeviceUndetermined {}
-
-@Component({
-  selector: 'permission-null-dialog',
-  templateUrl: './dialog/device-false.html',
-  standalone: true,
-  imports: [MatDialogModule, MatButtonModule],
-})
-export class DialogDeviceFalse {}

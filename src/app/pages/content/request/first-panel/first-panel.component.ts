@@ -1,21 +1,28 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { map, startWith } from 'rxjs/operators';
-import { GroupSubject } from 'src/app/pages/interface/groupSubject.interface';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormService } from 'src/app/pages/services/form.service';
+import { FilterService, SelectItemGroup } from 'primeng/api';
 import { FormGroup } from '@angular/forms';
+
+interface AutoCompleteCompleteEvent {
+  originalEvent: Event;
+  query: string;
+}
 
 @Component({
   selector: 'app-first-panel',
   templateUrl: './first-panel.component.html',
   styleUrls: ['./first-panel.component.scss'],
 })
-export class FirstPanelComponent implements OnInit {
+export class FirstPanelComponent {
   @Output() formValid = new EventEmitter<boolean>();
 
-  public firstStepForm: FormGroup;
-  filteredOptions: any;
+  firstStepForm: FormGroup;
+  filteredGroups: SelectItemGroup[] = [];
 
-  constructor(private formService: FormService) {
+  constructor(
+    private formService: FormService,
+    private filterService: FilterService
+  ) {
     this.firstStepForm = this.formService.firstStepForm;
   }
 
@@ -34,36 +41,46 @@ export class FirstPanelComponent implements OnInit {
     ],
   };
 
-  ngOnInit() {
-    this.filteredOptions = this.firstStepForm
-      .get('subjectGroup')!
-      .valueChanges.pipe(
-        startWith(''),
-        map((value) => this._filterGroup(value || ''))
-      );
-  }
-
   showError(controlName: string, errorType: string): boolean {
     const controlErrors = this.firstStepForm.get(controlName)?.errors;
     return controlErrors && controlErrors[errorType];
   }
 
-  private _filterGroup(value: string): GroupSubject[] {
-    if (value) {
-      return this.formService.groupSubjects
-        .map((group) => ({
-          group: group.group,
-          subjects: this.formService._filter(group.subjects, value),
-        }))
-        .filter((group) => group.subjects.length > 0);
+  filterGroup(event: AutoCompleteCompleteEvent) {
+    const query = event.query.toLowerCase();
+    const filteredGroups: SelectItemGroup[] = [];
+
+    for (const group of this.formService.groupSubjects) {
+      const filteredSubOptions = this.filterService.filter(
+        group.subjects.map((subject) => ({ label: subject, value: subject })),
+        ['label'],
+        query,
+        'contains'
+      );
+
+      if (filteredSubOptions && filteredSubOptions.length) {
+        filteredGroups.push({
+          label: group.group,
+          items: filteredSubOptions,
+        });
+      } else if (group.group.toLowerCase().includes(query)) {
+        filteredGroups.push({
+          label: group.group,
+          items: group.subjects.map((subject) => ({
+            label: subject,
+            value: subject,
+          })),
+        });
+      }
     }
 
-    return this.formService.groupSubjects;
+    this.filteredGroups = filteredGroups;
   }
 
   submitForm() {
     if (this.firstStepForm.valid) {
-      this.formValid.emit(true); // Emitir evento formValid
+      this.formValid.emit(true);
+      console.log(this.firstStepForm.valid);
     }
   }
 }

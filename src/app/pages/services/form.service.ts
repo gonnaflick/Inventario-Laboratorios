@@ -45,8 +45,10 @@ export class FormService {
   requireMatch(groupSubjects: GroupSubject[]): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
+      const selectedLabel = value ? value.label : '';
+
       const isValid = groupSubjects.some((group) =>
-        group.subjects.includes(value)
+        group.subjects.includes(selectedLabel)
       );
 
       if (Validators.required(control) && !value) {
@@ -56,10 +58,4 @@ export class FormService {
       return isValid ? null : { pattern: { value: control.value } };
     };
   }
-
-  _filter = (opt: string[], value: string): string[] => {
-    const filterValue = value.toLowerCase();
-
-    return opt.filter((item) => item.toLowerCase().includes(filterValue));
-  };
 }

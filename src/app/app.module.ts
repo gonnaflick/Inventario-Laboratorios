@@ -4,71 +4,49 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FirstPanelComponent } from './pages/content/request/first-panel/first-panel.component';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatStepperModule } from '@angular/material/stepper';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import { MatSelectModule } from '@angular/material/select';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { ScannerComponent } from './pages/content/request/scanner/scanner.component';
-import { RequestComponent } from './pages/content/request/request.component';
 import { MatIconModule } from '@angular/material/icon';
 import { FormService } from './pages/services/form.service';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatChipsModule } from '@angular/material/chips';
-import { CdkStepperModule } from '@angular/cdk/stepper';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessagesModule } from 'primeng/messages';
+import { DialogModule } from 'primeng/dialog';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+
+import { RequestComponent } from './pages/content/request/request.component';
+import { FirstPanelComponent } from './pages/content/request/first-panel/first-panel.component';
+import { SecondPanelComponent } from './pages/content/request/second-panel/second-panel.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
     AppComponent,
     RequestComponent,
     FirstPanelComponent,
-    ScannerComponent,
+    SecondPanelComponent,
   ],
   imports: [
     BrowserModule,
-    CdkStepperModule,
-    MatChipsModule,
+    ButtonModule,
+    InputTextModule,
+    MessagesModule,
+    DialogModule,
+    AutoCompleteModule,
     MatIconModule,
-    MatGridListModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatAutocompleteModule,
-    MatDividerModule,
-    MatFormFieldModule,
-    MatStepperModule,
-    MatExpansionModule,
     MatButtonModule,
-    MatInputModule,
     ZXingScannerModule,
-    MatSelectModule,
-    MatFormFieldModule,
-    MatProgressSpinnerModule,
     CommonModule,
-    MatSnackBarModule,
-    MatDialogModule,
-    MatSnackBarModule,
+    NgbModule,
   ],
-  providers: [
-    FormService,
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { displayDefaultIndicatorType: false },
-    },
-  ],
+  providers: [FormService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
