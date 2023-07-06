@@ -1,26 +1,40 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, Output, OnInit, EventEmitter } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { FormService } from 'src/app/pages/services/form.service';
 
 @Component({
   selector: 'app-second-panel',
   templateUrl: './second-panel.component.html',
   styleUrls: ['./second-panel.component.css'],
 })
-export class SecondPanelComponent implements OnInit, OnDestroy {
-  private qrSignature?: string;
+export class SecondPanelComponent implements OnDestroy, OnInit {
+  @Output() formValid = new EventEmitter<boolean>();
+
   private mediaDevices: MediaDeviceInfo[] = [];
   private cameraLabels: { [deviceId: string]: string } = {};
+  private hasDevices: boolean | undefined;
 
   availableCameras?: MediaDeviceInfo[];
   currentCamera: MediaDeviceInfo | undefined;
-  hasDevices: boolean | undefined;
   hasPermission: boolean | undefined;
 
-  scannerEnabled = false;
+  hasScanned: boolean = false;
+  scannerEnabled: boolean = false;
+  scanSuccess: boolean = false;
 
-  constructor() {}
+  secondStepForm: FormGroup;
+
+  constructor(
+    private formService: FormService
+  ) {
+    this.secondStepForm = this.formService.secondStepForm;
+  }
 
   ngOnInit() {
-    this.setupCameraDetection();
+    if (this.secondStepForm.valid) {
+      this.hasScanned = true;
+      this.scanSuccess = true;
+    }
   }
 
   ngOnDestroy() {
@@ -43,54 +57,59 @@ export class SecondPanelComponent implements OnInit, OnDestroy {
   }
 
   updateCameraList() {
-    navigator.mediaDevices
-      .enumerateDevices()
-      .then((devices: MediaDeviceInfo[]) => {
-        this.mediaDevices = devices.filter(
-          (device) => device.kind === 'videoinput'
-        );
-        this.availableCameras = this.mediaDevices;
-        this.hasDevices = this.mediaDevices.length > 0;
+    setTimeout(() => {
+      navigator.mediaDevices
+        .enumerateDevices()
+        .then((devices: MediaDeviceInfo[]) => {
+          this.mediaDevices = devices.filter(
+            (device) => device.kind === 'videoinput'
+          );
+          this.availableCameras = this.mediaDevices;
+          this.hasDevices = this.mediaDevices.length > 0;
 
-        const previousLabels = { ...this.cameraLabels };
-        this.cameraLabels = {};
+          const previousLabels = { ...this.cameraLabels };
+          this.cameraLabels = {};
 
-        for (const device of this.mediaDevices) {
-          if (previousLabels[device.deviceId]) {
-            this.cameraLabels[device.deviceId] =
-              previousLabels[device.deviceId];
-          } else {
-            this.cameraLabels[device.deviceId] =
-              device.label ||
-              'Camara ' + (Object.keys(this.cameraLabels).length + 1);
+          for (const device of this.mediaDevices) {
+            if (previousLabels[device.deviceId]) {
+              this.cameraLabels[device.deviceId] =
+                previousLabels[device.deviceId];
+            } else {
+              this.cameraLabels[device.deviceId] = device.label;
+            }
           }
-        }
-        if (
-          this.currentCamera &&
-          !this.mediaDevices.find(
-            (device) => device.deviceId === this.currentCamera?.deviceId
-          )
-        ) {
-          this.currentCamera = undefined;
-          this.scannerEnabled = false;
-        }
 
-        console.log('Camera list updated.');
-      })
-      .catch((error: any) => {
-        console.error('Failed to update camera list:', error);
-      });
+          if (
+            this.currentCamera &&
+            !this.mediaDevices.find(
+              (device) => device.deviceId === this.currentCamera?.deviceId
+            )
+          ) {
+            this.currentCamera = undefined;
+          }
+          console.log('Camera list updated.');
+        })
+        .catch((error: any) => {
+          console.error('Failed to update camera list: ', error);
+        });
+    }, 1000);
   }
 
   onHasPermission(has: boolean) {
-    this.hasPermission = has;
-    if (has === false) {
-      console.log('DialogPermissionFalse');
-    } else if (has === true) {
-      console.log('Escanee el codigo QR de la credencial virtual del alumno');
-    } else if (has === null && this.hasDevices === null) {
-      console.log('DialogPermissionNull');
+    if (!this.secondStepForm.valid) {
+      if (has === false) {
+        console.log('DialogPermissionFalse');
+      } else if (has === true) {
+        this.setupCameraDetection();
+        console.log('Escanee el codigo QR de la credencial virtual del alumno');
+        this.scannerEnabled = true;
+      } else if (has === null && this.hasDevices === null) {
+        console.log('DialogPermissionNull');
+      }
+    } else {
+      this.scannerEnabled = false;
     }
+    this.hasPermission = has;
   }
 
   onHasDevices(has: boolean) {
@@ -111,16 +130,51 @@ export class SecondPanelComponent implements OnInit, OnDestroy {
     return this.cameraLabels[camera.deviceId];
   }
 
-  checkSignature() {
-    console.log(this.qrSignature);
+  scanSuccessHandler(scannedQR: string): void {
+    this.secondStepForm.controls['scannedQR'].setValue(scannedQR);
+    this.secondStepForm.get('scannedQR')?.setValidators(this.formService.validateScannedLink(scannedQR));
+    this.secondStepForm.get('scannedQR')?.updateValueAndValidity();
+    this.hasScanned = true; if (this.secondStepForm.get('scannedQR')?.valid) {
+      this.scanSuccess = true;
+      this.scannerEnabled = false;
+    }
   }
 
-  scanSuccessHandler(event: any) {
-    this.qrSignature = event;
-    document.getElementById('qr-scanner')?.setAttribute('class', 'success');
-    this.checkSignature();
-    setTimeout(function () {
-      document.getElementById('qr-scanner')?.setAttribute('class', 'error');
-    }, 1000);
+  openLink() {
+    window.open(this.secondStepForm.controls['scannedQR'].value, '_blank');
+  }
+
+  submitForm() {
+    if (this.secondStepForm.valid) {
+      this.formValid.emit(true);
+      console.log(this.secondStepForm.valid);
+    }
   }
 }
+@Component({
+  selector: 'permission-null-dialog',
+  templateUrl: './dialog/permission-null.html',
+  standalone: true,
+})
+export class DialogPermissionNull { }
+
+@Component({
+  selector: 'permission-false-dialog',
+  templateUrl: './dialog/permission-false.html',
+  standalone: true,
+})
+export class DialogPermissionFalse { }
+
+@Component({
+  selector: 'permission-null-dialog',
+  templateUrl: './dialog/device-undetermined.html',
+  standalone: true,
+})
+export class DialogDeviceUndetermined { }
+
+@Component({
+  selector: 'permission-null-dialog',
+  templateUrl: './dialog/device-false.html',
+  standalone: true,
+})
+export class DialogDeviceFalse { }

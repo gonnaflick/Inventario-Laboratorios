@@ -1,142 +1,145 @@
 <div class="row w-100 gy-4 mt-4">
-  <div
-    class="col-lg-5 col-md-12 d-flex flex-column align-items-left justify-content-left"
-  >
-    <form [formGroup]="firstStepForm" class="w-75">
+  <div class="col-lg-5 col-md-12 align-items-center justify-content-center">
+    <form [formGroup]="firstStepForm" class="w-75 needs-validation">
       <h4 class="fs-2 mb-2">Solicitante</h4>
       <h5 class="fs-6 mb-4">Ingrese toda la información del solicitante</h5>
-      <div class="mb-3">
-        <label for="name" class="form-label">Nombre</label>
-        <input
-          formControlName="name"
-          maxlength="50"
-          placeholder="Nombre y apellido"
-          id="name"
-          required
-          class="form-control"
-        />
+      <div class="col-md-4 mb-3">
+        <label for="name">Nombre</label>
+        <input type="text" formControlName="name" maxlength="50" id="name" required class="form-control" [ngClass]="{
+            'is-invalid':
+              this.firstStepForm.controls['name'].invalid &&
+              (this.firstStepForm.controls['name'].touched ||
+                this.firstStepForm.controls['name'].dirty),
+            'is-valid':
+              this.firstStepForm.controls['name'].valid &&
+              (this.firstStepForm.controls['name'].touched ||
+                this.firstStepForm.controls['name'].dirty)
+          }" />
 
-        <small
-          *ngIf="
+        <div class="invalid-feedback" *ngIf="
             this.firstStepForm.controls['name'].hasError('pattern') &&
-            this.firstStepForm.controls['name'].touched &&
+            (this.firstStepForm.controls['name'].touched ||
+              this.firstStepForm.controls['name'].dirty) &&
             showError('name', 'pattern')
-          "
-          id="name-pattern-help"
-          class="form-text text-danger"
-        >
+          " id="name-pattern-help" class="form-text text-danger">
           {{ errorMessage.nameControl[0].message }}
-        </small>
+        </div>
 
-        <small
-          *ngIf="
+        <div class="invalid-feedback" *ngIf="
             this.firstStepForm.controls['name'].hasError('required') &&
-            this.firstStepForm.controls['name'].touched &&
+            (this.firstStepForm.controls['name'].touched ||
+              this.firstStepForm.controls['name'].dirty) &&
             showError('name', 'required')
-          "
-          id="name-required-help"
-          class="form-text text-danger"
-        >
+          " id="name-required-help" class="form-text text-danger">
           {{ errorMessage.nameControl[1].message }}
-        </small>
+        </div>
       </div>
 
-      <div class="mb-3">
-        <label for="studentId" class="form-label">Matricula</label>
-        <input
-          formControlName="studentId"
-          maxlength="6"
-          placeholder="Ej. 338906"
-          id="studentId"
-          required
-          class="form-control"
-        />
+      <div class="col-md-4 mb-3">
+        <label for="name">Apellido</label>
+        <input type="text" formControlName="lastname" maxlength="50" id="lastname" required class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              this.firstStepForm.controls['lastname'].invalid &&
+              (this.firstStepForm.controls['lastname'].touched ||
+                this.firstStepForm.controls['lastname'].dirty),
+            'is-valid':
+              this.firstStepForm.controls['lastname'].valid &&
+              (this.firstStepForm.controls['lastname'].touched ||
+                this.firstStepForm.controls['lastname'].dirty)
+          }" />
 
-        <small
-          *ngIf="
+        <div class="invalid-feedback" *ngIf="
+            this.firstStepForm.controls['lastname'].hasError('pattern') &&
+            (this.firstStepForm.controls['lastname'].touched ||
+              this.firstStepForm.controls['lastname'].dirty) &&
+            showError('lastname', 'pattern')
+          " id="lastname-pattern-help" class="form-text text-danger">
+          {{ errorMessage.lastnameControl[0].message }}
+        </div>
+
+        <div class="invalid-feedback" *ngIf="
+            this.firstStepForm.controls['lastname'].hasError('required') &&
+            (this.firstStepForm.controls['lastname'].touched ||
+              this.firstStepForm.controls['lastname'].dirty) &&
+            showError('lastname', 'required')
+          " id="lastname-required-help" class="form-text text-danger">
+          {{ errorMessage.lastnameControl[1].message }}
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label for="name">Matricula</label>
+        <input type="text" formControlName="studentId" maxlength="6" id="studentId" required class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              this.firstStepForm.controls['studentId'].invalid &&
+              (this.firstStepForm.controls['studentId'].touched ||
+                this.firstStepForm.controls['studentId'].dirty),
+            'is-valid':
+              this.firstStepForm.controls['studentId'].valid &&
+              (this.firstStepForm.controls['studentId'].touched ||
+                this.firstStepForm.controls['studentId'].dirty)
+          }" />
+
+        <div class="invalid-feedback" *ngIf="
             this.firstStepForm.controls['studentId'].hasError('pattern') &&
-            this.firstStepForm.controls['studentId'].touched &&
+            (this.firstStepForm.controls['studentId'].touched ||
+              this.firstStepForm.controls['studentId'].dirty) &&
             showError('studentId', 'pattern')
-          "
-          id="studentId-pattern-help"
-          class="form-text text-danger"
-        >
+          " id="studentId-pattern-help" class="form-text text-danger">
           {{ errorMessage.studentIdControl[0].message }}
-        </small>
+        </div>
 
-        <small
-          *ngIf="
+        <div class="invalid-feedback" *ngIf="
             this.firstStepForm.controls['studentId'].hasError('required') &&
-            this.firstStepForm.controls['studentId'].touched &&
+            (this.firstStepForm.controls['studentId'].touched ||
+              this.firstStepForm.controls['studentId'].dirty) &&
             showError('studentId', 'required')
-          "
-          id="studentId-required-help"
-          class="form-text text-danger"
-        >
+          " id="studentId-required-help" class="form-text text-danger">
           {{ errorMessage.studentIdControl[1].message }}
-        </small>
+        </div>
       </div>
 
-      <div class="mb-3">
-        <label for="groupSubject" class="form-label">Materia</label>
-        <p-autoComplete
-          styleClass="input-autocomplete"
-          id="groupSubject"
-          formControlName="subjectGroup"
-          [group]="true"
-          [suggestions]="filteredGroups"
-          (completeMethod)="filterGroup($event)"
-          field="label"
-          [dropdown]="true"
-          [forceSelection]="true"
-          placeholder="Seleccione una materia"
-        >
-          <ng-template let-group pTemplate="group">
-            <span class="group-header">{{ group.label }}</span>
-          </ng-template>
-          <ng-template let-subject pTemplate="item">
-            <div class="d-flex flex-column">
-              <span class="subject-item">
-                {{ subject.label }}
-              </span>
-              <span class="subject-item">
-                {{ subject.label }}
-              </span>
-            </div>
-          </ng-template>
-        </p-autoComplete>
+      <div class="col-md-4 mb-3">
+        <label for="course">Materia</label>
 
-        <small
-          *ngIf="
-            this.firstStepForm.controls['subjectGroup'].hasError('pattern') &&
-            this.firstStepForm.controls['subjectGroup'].touched &&
-            showError('subjectGroup', 'pattern')
-          "
-          id="subjectGroup-pattern-help"
-          class="p-error robotoFont"
-        >
-          {{ errorMessage.subjectGroupControl[0].message }}
-        </small>
+        <input id="typeahead-focus" type="text" class="form-control" formControlName="course" [ngbTypeahead]="search"
+          [inputFormatter]="formatter" [resultTemplate]="rt" (focus)="focus$.next($any($event).target.value)"
+          (click)="click$.next($any($event).target.value)" [ngClass]="{
+          'is-invalid': this.firstStepForm.controls['course'].invalid &&
+            (this.firstStepForm.controls['course'].touched || this.firstStepForm.controls['course'].dirty),
+          'is-valid': this.firstStepForm.controls['course'].valid &&
+            (this.firstStepForm.controls['course'].touched || this.firstStepForm.controls['course'].dirty)
+        }" />
 
-        <small
-          *ngIf="
-            this.firstStepForm.controls['subjectGroup'].hasError('required') &&
-            this.firstStepForm.controls['subjectGroup'].touched &&
-            showError('subjectGroup', 'required')
-          "
-          id="subjectGroup-required-help"
-          class="p-error robotoFont"
-        >
-          {{ errorMessage.subjectGroupControl[1].message }}
-        </small>
+        <ng-template #rt let-r="result" let-t="term">
+          <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight><br>
+          <span>{{ r.professor }}</span>
+        </ng-template>
+
+
+        <div class="invalid-feedback" *ngIf="
+            this.firstStepForm.controls['course'].hasError('pattern') &&
+            (this.firstStepForm.controls['course'].touched ||
+              this.firstStepForm.controls['course'].dirty) &&
+            showError('course', 'pattern')
+          " id="course-pattern-help" class="form-text text-danger">
+          {{ errorMessage.courseControl[0].message }}
+        </div>
+
+        <div class="invalid-feedback" *ngIf="
+            this.firstStepForm.controls['course'].hasError('required') &&
+            (this.firstStepForm.controls['course'].touched ||
+              this.firstStepForm.controls['course'].dirty) &&
+            showError('course', 'required')
+          " id="course-required-help" class="form-text text-danger">
+          {{ errorMessage.courseControl[1].message }}
+        </div>
       </div>
 
       <div>
-        <button
-          class="btn btn-outline-primary"
-          type="button"
-          (click)="submitForm()"
-        >
+        <button class="btn btn-outline-primary" type="button" (click)="submitForm()">
           Siguiente
         </button>
       </div>

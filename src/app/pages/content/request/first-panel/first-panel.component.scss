@@ -2,37 +2,20 @@
 
 :host ::ng-deep {
   .input-autocomplete {
-    width: 100%;
-    margin-bottom: 1.25rem;
-    border: 1px solid $gray;
-    border-radius: 5px;
     .p-inputtext {
       font-family: "Roboto";
       color: $dark;
-      border: 0px;
       background-color: transparent;
       font-size: 1rem;
       font-weight: normal;
       padding: 8px;
     }
 
-    .p-button {
-      background-color: transparent;
-      color: $dark;
-      border: 0px;
-      padding: 8px;
-      width: 2rem;
-    }
-    .p-button:focus,
-    .p-inputtext:focus {
-      box-shadow: none;
-    }
-  }
-  .input-autocomplete {
     .p-autocomplete-panel {
       background-color: $white;
       border-radius: 5px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
       ul li {
         font-family: "Roboto";
         color: $dark;
@@ -40,6 +23,7 @@
         cursor: pointer;
         transition: background-color 0.3s;
       }
+
       ul .p-highlight {
         color: $primary;
         background-color: $white;

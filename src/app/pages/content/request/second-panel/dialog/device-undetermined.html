@@ -1,11 +1,18 @@
-<h1 style="padding-top: 5px" mat-dialog-title>Error al conectar dispositivo</h1>
-<mat-dialog-content class="mat-typography">
-  <p style="font-size: 14px">
-    Esto puede ocurrir por un error de seguridad, verifique sus dispositivos.
-  </p>
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button color="primary" mat-button mat-dialog-close cdkFocusInitial>
-    Aceptar
-  </button>
-</mat-dialog-actions>
+<div class="modal fade" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Error al conectar dispositivo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Esto puede ocurrir por un error de seguridad, verifique sus dispositivos.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>

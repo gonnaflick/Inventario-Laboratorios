@@ -2,15 +2,11 @@
   <div class="stepper">
     <div class="step-buttons">
       <ng-container *ngFor="let step of steps; let i = index">
-        <button
-          class="step-button"
-          [ngClass]="{
+        <button class="step-button" [ngClass]="{
             active: selectedIndex === i,
             completed: step.completed,
             disabled: i !== 0 && !step.completed && !steps[i - 1].completed
-          }"
-          (click)="setStep(i)"
-        >
+          }" (click)="setStep(i)">
           <div class="step-icon" [ngClass]="getStepClass(step, 'icon')">
             <mat-icon class="step-icon-size">{{ step.icon }}</mat-icon>
           </div>
@@ -22,11 +18,7 @@
             {{ stepStatusMessages[getStepStatus(step)] }}
           </span>
         </button>
-        <div
-          class="step-line"
-          *ngIf="i !== steps.length - 1"
-          [ngClass]="getStepClass(step, 'line')"
-        ></div>
+        <div class="step-line" *ngIf="i !== steps.length - 1" [ngClass]="getStepClass(step, 'line')"></div>
       </ng-container>
     </div>
   </div>
@@ -34,9 +26,7 @@
   <div class="content">
     <div *ngIf="selectedIndex === 0">
       <div id="first-panel">
-        <app-first-panel
-          (formValid)="handleFormValid($event)"
-        ></app-first-panel>
+        <app-first-panel (formValid)="handleFormValid($event)"></app-first-panel>
       </div>
     </div>
     <div *ngIf="selectedIndex === 1">

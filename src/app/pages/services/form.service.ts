@@ -6,20 +6,23 @@ import {
   ValidatorFn,
   AbstractControl,
 } from '@angular/forms';
-import { GroupSubject } from 'src/app/pages/interface/groupSubject.interface';
+import { Course } from 'src/app/pages/interface/course.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FormService {
-  groupSubjects: GroupSubject[] = [
+  qrCode: string = '';
+  courses: Course[] = [
     {
-      group: '8HW1',
-      subjects: ['Como', 'Hola', 'que', 'tal'],
+      id: '1',
+      name: '8HW1 - Circuitos Electronicos',
+      professor: 'Jesus Jimenez',
     },
     {
-      group: '9HW1',
-      subjects: ['seg', 'cal', 'f', 'tmal'],
+      id: '1',
+      name: '6HW1 - Circuitos Logicos II',
+      professor: 'Alex Hernandez',
     },
   ];
 
@@ -30,32 +33,51 @@ export class FormService {
         '^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+( [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$'
       ),
     ]),
+    lastname: new FormControl('', [
+      Validators.required,
+      Validators.pattern(
+        '^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+( [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$'
+      ),
+    ]),
     studentId: new FormControl('', [
       Validators.required,
       Validators.pattern('^[0-9]{6,6}$'),
     ]),
-    subjectGroup: new FormControl('', [
-      this.requireMatch(this.groupSubjects),
+    course: new FormControl('', [
+      this.requireMatch(this.courses),
       Validators.required,
     ]),
   });
 
-  constructor(private _formBuilder: FormBuilder) {}
+  secondStepForm = this._formBuilder.group({
+    scannedQR: new FormControl('', [
+      this.validateScannedLink(this.qrCode),
+      Validators.required,
+    ]),
+  });
 
-  requireMatch(groupSubjects: GroupSubject[]): ValidatorFn {
+  constructor(private _formBuilder: FormBuilder) { }
+
+  requireMatch(courses: Course[]): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      const value = control.value;
-      const selectedLabel = value ? value.label : '';
+      const selectedCourse = control.value.name;
 
-      const isValid = groupSubjects.some((group) =>
-        group.subjects.includes(selectedLabel)
-      );
-
-      if (Validators.required(control) && !value) {
-        return { required: { value: control.value } };
+      if (Validators.required(control) && !selectedCourse) {
+        return { required: { value: control.value.name } };
       }
 
-      return isValid ? null : { pattern: { value: control.value } };
+      const isValid = courses.some((course) => course.name === selectedCourse);
+
+      return isValid ? null : { pattern: { value: control.value.name } };
     };
   }
+
+  validateScannedLink(scannedQR: string): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const isValid = scannedQR.startsWith('https://verificacion.uach.mx/credencial/');
+
+      return isValid ? null : { invalidLink: true };
+    };
+  }
+
 }

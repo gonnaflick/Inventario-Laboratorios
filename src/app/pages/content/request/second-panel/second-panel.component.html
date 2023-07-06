@@ -1,32 +1,43 @@
-<div class="scanner-container">
-  <div class="scan-square"></div>
-  <zxing-scanner
-    [(device)]="currentCamera"
-    (scanSuccess)="scanSuccessHandler($event)"
-    (permissionResponse)="onHasPermission($event)"
-    (hasDevices)="onHasDevices($event)"
-    class="scan-video"
-  >
-  </zxing-scanner>
+<div class="row w-100 gy-4 mt-4">
+  <div class="col-lg-5 col-md-12 align-items-center justify-content-center">
+    <form [formGroup]="secondStepForm" class="w-75 needs-validation">
+
+      <div class="scanner-container">
+        <div class="scan-square"></div>
+        <zxing-scanner [enable]="scannerEnabled" [(device)]="currentCamera" (scanSuccess)="scanSuccessHandler($event)"
+          (permissionResponse)="onHasPermission($event)" (hasDevices)="onHasDevices($event)" class="scan-video">
+        </zxing-scanner>
+      </div>
+
+      <input readonly aria-describedby="basic-addon2" type="text" formControlName="scannedQR" id="scannedQR" required
+        class="form-control" [ngClass]="{
+          'is-invalid': this.secondStepForm.controls['scannedQR'].invalid && (this.secondStepForm.controls['scannedQR'].valueChanges) && hasScanned,
+          'is-valid': this.secondStepForm.controls['scannedQR'].valid && (this.secondStepForm.controls['scannedQR'].valueChanges) && hasScanned
+        }" />
+
+      <div>
+        <button class="btn btn-secondary" (click)="openLink()" [disabled]="!scanSuccess">Abrir enlace</button>
+      </div>
+
+      <select class="form-select" *ngIf="hasPermission === true" #list (change)="onCameraSelectChange(list.value)">
+        <option value="" [selected]="!currentCamera">Camara desactivada</option>
+        <option *ngFor="let camera of availableCameras" [value]="camera.deviceId"
+          [selected]="currentCamera && camera.deviceId === currentCamera.deviceId">
+          {{ getCameraLabel(camera) }}
+        </option>
+      </select>
+
+      <ng-container *ngIf="hasPermission === undefined">
+        <h2>Solicitud de permisos</h2>
+        <p>Se requiere acceso a la cámara para utilizar el escáner.</p>
+        <p>Haz clic en "Aceptar" para permitir el acceso a la cámara.</p>
+      </ng-container>
+
+
+      <div><button class="btn btn-primary" type="button" (click)="submitForm()">
+          Siguiente
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
-
-<select
-  *ngIf="hasPermission === true"
-  #list
-  (change)="onCameraSelectChange(list.value)"
->
-  <option value="" [selected]="!currentCamera">Camara desactivada</option>
-  <option
-    *ngFor="let camera of availableCameras"
-    [value]="camera.deviceId"
-    [selected]="currentCamera && camera.deviceId === currentCamera.deviceId"
-  >
-    {{ getCameraLabel(camera) }}
-  </option>
-</select>
-
-<ng-container *ngIf="hasPermission === undefined">
-  <h2>Solicitud de permisos</h2>
-  <p>Se requiere acceso a la cámara para utilizar el escáner.</p>
-  <p>Haz clic en "Aceptar" para permitir el acceso a la cámara.</p>
-</ng-container>
