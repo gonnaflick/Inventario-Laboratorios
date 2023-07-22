@@ -27,8 +27,9 @@
     "@zxing/ngx-scanner": "^3.9.0",
     "angular-animations": "^0.11.0",
     "bootstrap": "^5.2.3",
+    "primeflex": "^3.3.1",
     "primeicons": "^6.0.1",
-    "primeng": "^15.0.0",
+    "primeng": "^15.4.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"

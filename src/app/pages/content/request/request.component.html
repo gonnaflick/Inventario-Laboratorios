@@ -1,40 +1,35 @@
 <div class="container">
-  <div class="stepper">
-    <div class="step-buttons">
-      <ng-container *ngFor="let step of steps; let i = index">
-        <button class="step-button" [ngClass]="{
-            active: selectedIndex === i,
-            completed: step.completed,
-            disabled: i !== 0 && !step.completed && !steps[i - 1].completed
-          }" (click)="setStep(i)">
-          <div class="step-icon" [ngClass]="getStepClass(step, 'icon')">
-            <mat-icon class="step-icon-size">{{ step.icon }}</mat-icon>
-          </div>
-          <div class="step-labels">
-            <span class="step-number text-muted">PASO {{ i + 1 }}</span>
-            <span class="step-title">{{ step.label }}</span>
-          </div>
-          <span [ngClass]="getStepClass(step, 'status')">
-            {{ stepStatusMessages[getStepStatus(step)] }}
-          </span>
-        </button>
-        <div class="step-line" *ngIf="i !== steps.length - 1" [ngClass]="getStepClass(step, 'line')"></div>
-      </ng-container>
-    </div>
-  </div>
-
   <div class="content">
     <div *ngIf="selectedIndex === 0">
       <div id="first-panel">
-        <app-first-panel (formValid)="handleFormValid($event)"></app-first-panel>
+        <app-first-panel
+          (formValid)="handleFormValid($event)"
+        ></app-first-panel>
       </div>
     </div>
     <div *ngIf="selectedIndex === 1">
       <div id="second-panel">
-        <app-second-panel></app-second-panel>
+        <app-second-panel
+          (formValid)="handleFormValid($event)"
+        ></app-second-panel>
       </div>
     </div>
-    <div *ngIf="selectedIndex === 2">SELECCIONA TU EQUIPO</div>
-    <div *ngIf="selectedIndex === 3">FINISH</div>
+    <div *ngIf="selectedIndex === 2">
+      <div id="third-panel">
+        <app-third-panel
+          (formValid)="handleFormValid($event)"
+        ></app-third-panel>
+      </div>
+    </div>
+    <div *ngIf="selectedIndex === 3">
+      <div id="fourth-panel">
+        <app-fourth-panel
+          (formValid)="handleFormValid($event)"
+        ></app-fourth-panel>
+      </div>
+    </div>
+    <div *ngIf="selectedIndex === 4">
+      <div id="end-panel">FINISH</div>
+    </div>
   </div>
 </div>

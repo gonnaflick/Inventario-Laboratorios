@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SecondPanelComponent } from './second-panel.component';
 
-describe('SecondPanelComponent', () => {
+describe('ThirdPanelComponent', () => {
   let component: SecondPanelComponent;
   let fixture: ComponentFixture<SecondPanelComponent>;
 

@@ -7,24 +7,13 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { Course } from 'src/app/pages/interface/course.interface';
+import { CourseService } from 'src/app/pages/services/course.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FormService {
-  qrCode: string = '';
-  courses: Course[] = [
-    {
-      id: '1',
-      name: '8HW1 - Circuitos Electronicos',
-      professor: 'Jesus Jimenez',
-    },
-    {
-      id: '1',
-      name: '6HW1 - Circuitos Logicos II',
-      professor: 'Alex Hernandez',
-    },
-  ];
+  courses!: Course[];
 
   firstStepForm = this._formBuilder.group({
     name: new FormControl('', [
@@ -43,20 +32,30 @@ export class FormService {
       Validators.required,
       Validators.pattern('^[0-9]{6,6}$'),
     ]),
-    course: new FormControl('', [
-      this.requireMatch(this.courses),
-      Validators.required,
-    ]),
-  });
-
-  secondStepForm = this._formBuilder.group({
+    course: this._formBuilder.control('', Validators.required),
     scannedQR: new FormControl('', [
-      this.validateScannedLink(this.qrCode),
+      this.validateScannedLink(),
       Validators.required,
     ]),
   });
 
-  constructor(private _formBuilder: FormBuilder) { }
+  secondStepForm = this._formBuilder.group({});
+
+  thirdStepForm = this._formBuilder.group({});
+
+  fourthStepForm = this._formBuilder.group({});
+
+  constructor(
+    private _formBuilder: FormBuilder,
+    private courseService: CourseService
+  ) {
+    this.courseService.getCourses().then((data) => {
+      this.courses = data;
+      this.firstStepForm
+        .get('course')!
+        .setValidators([this.requireMatch(this.courses), Validators.required]);
+    });
+  }
 
   requireMatch(courses: Course[]): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
@@ -72,12 +71,14 @@ export class FormService {
     };
   }
 
-  validateScannedLink(scannedQR: string): ValidatorFn {
+  validateScannedLink(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      const isValid = scannedQR.startsWith('https://verificacion.uach.mx/credencial/');
+      const scannedQR = control.value;
+      const isValid = scannedQR.startsWith(
+        'https://verificacion.uach.mx/credencial/'
+      );
 
       return isValid ? null : { invalidLink: true };
     };
   }
-
 }
