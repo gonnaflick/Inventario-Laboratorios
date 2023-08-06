@@ -1,10 +1,11 @@
 export interface Item {
-  id: string;
-  code: string;
-  name: string;
-  description: string;
-  image: string;
-  quantity: number;
-  category: string[];
-  inventoryStatus: string;
+  id?: string;
+  name?: string;
+  brand?: string;
+  folio?: string;
+  description?: string;
+  image?: string;
+  quantity?: number;
+  category?: string;
+  inventoryStatus?: string;
 }

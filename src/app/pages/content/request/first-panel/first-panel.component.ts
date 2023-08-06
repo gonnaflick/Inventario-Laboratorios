@@ -20,10 +20,15 @@ import {
 } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Item } from 'src/app/pages/interface/item.interface';
+import { ItemService } from 'src/app/pages/services/item.service';
+
 @Component({
   selector: 'app-first-panel',
   templateUrl: './first-panel.component.html',
   styleUrls: ['./first-panel.component.scss'],
+  providers: [MessageService, ConfirmationService],
 })
 export class FirstPanelComponent implements OnDestroy, OnInit {
   @ViewChild('instance', { static: true }) instance: NgbTypeahead | undefined;
@@ -48,6 +53,16 @@ export class FirstPanelComponent implements OnDestroy, OnInit {
   scannerEnabled: boolean = false;
   scanSuccess: boolean = false;
 
+  itemDialog: boolean = false;
+  items!: Item[];
+  item!: Item;
+  selectedItem!: Item[] | null;
+  submitted: boolean = false;
+  statuses!: any[];
+
+  first = 0;
+  rows = 5;
+
   public errorMessage = {
     nameControl: [
       { type: 'pattern', message: 'Nombre no válido' },
@@ -69,7 +84,10 @@ export class FirstPanelComponent implements OnDestroy, OnInit {
 
   constructor(
     private formService: FormService,
-    private courseService: CourseService
+    private courseService: CourseService,
+    private itemService: ItemService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) {
     this.firstStepForm = this.formService.firstStepForm;
     this.courseService.getCourses().then((data) => (this.courses = data));
@@ -80,6 +98,14 @@ export class FirstPanelComponent implements OnDestroy, OnInit {
       this.hasScanned = true;
       this.scanSuccess = true;
     }
+
+    this.itemService.getItems().then((data) => (this.items = data));
+
+    this.statuses = [
+      { label: 'INSTOCK', value: 'instock' },
+      { label: 'LOWSTOCK', value: 'lowstock' },
+      { label: 'OUTOFSTOCK', value: 'outofstock' },
+    ];
   }
 
   search: OperatorFunction<
@@ -229,5 +255,137 @@ export class FirstPanelComponent implements OnDestroy, OnInit {
       this.formValid.emit(true);
       console.log(this.firstStepForm.valid);
     }
+  }
+
+  openNew() {
+    this.item = {};
+    this.submitted = false;
+    this.itemDialog = true;
+  }
+
+  deleteSelectedItem() {
+    if (this.selectedItem!.length > 1) {
+      this.confirmationService.confirm({
+        message:
+          'Seguro que desea eliminar los ' +
+          this.selectedItem?.length +
+          ' equipos de la lista de solicitud?',
+        header: 'Confirmar',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.items = this.items.filter(
+            (val) => !this.selectedItem?.includes(val)
+          );
+          this.selectedItem = null;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Completado',
+            detail: 'Equipos eliminados',
+            life: 3000,
+          });
+        },
+      });
+    } else {
+      this.deleteItem(this.selectedItem![0]);
+    }
+  }
+
+  editItem(item: Item) {
+    this.item = { ...item };
+    this.itemDialog = true;
+  }
+
+  deleteItem(item: Item) {
+    this.confirmationService.confirm({
+      message:
+        'Seguro que deseas eliminar el equipo "' +
+        item.name +
+        '" de la lista de solicitud?',
+      header: 'Confirmar',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.items = this.items.filter((val) => val.id !== item.id);
+        this.item = {};
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Completado',
+          detail: 'Equipo eliminado',
+          life: 3000,
+        });
+      },
+    });
+  }
+
+  hideDialog() {
+    this.itemDialog = false;
+    this.submitted = false;
+  }
+
+  saveItem() {
+    this.submitted = true;
+
+    if (this.item.name?.trim()) {
+      if (this.item.id) {
+        this.items[this.findIndexById(this.item.id)] = this.item;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Completado',
+          detail: 'Equipo actualizado',
+          life: 3000,
+        });
+      } else {
+        this.item.id = this.createId();
+        this.item.image = 'item-placeholder.svg';
+        this.items.push(this.item);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Completado',
+          detail: 'Equipo agregado a la lista',
+          life: 3000,
+        });
+      }
+
+      this.items = [...this.items];
+      this.itemDialog = false;
+      this.item = {};
+    }
+  }
+
+  findIndexById(id: string): number {
+    let index = -1;
+    for (let i = 0; i < this.items.length; i++) {
+      if (this.items[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    return index;
+  }
+
+  createId(): string {
+    let id = '';
+    var chars =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (var i = 0; i < 5; i++) {
+      id += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return id;
+  }
+
+  getSeverity(status: string) {
+    switch (status) {
+      case 'INSTOCK':
+        return 'success';
+      case 'LOWSTOCK':
+        return 'warning';
+      case 'OUTOFSTOCK':
+        return 'danger';
+    }
+    return '';
+  }
+
+  clearSelection() {
+    this.selectedItem = null;
   }
 }

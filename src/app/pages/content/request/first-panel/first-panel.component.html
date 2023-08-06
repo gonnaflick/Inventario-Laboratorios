@@ -291,3 +291,218 @@
     </form>
   </div>
 </div>
+
+<div class="card">
+  <h4 class="fs-4 mb-4">Lista de equipo a solicitar</h4>
+  <p-toast></p-toast>
+  <p-toolbar styleClass="toolbar mb-4 gap-2">
+    <ng-template pTemplate="left">
+      <p-button
+        icon="pi pi-times"
+        (click)="clearSelection()"
+        styleClass="p-button-rounded p-button-text"
+      ></p-button>
+      <div class="flex align-items-center justify-content-between">
+        {{ selectedItem ? selectedItem.length : 0 }}
+        seleccionado{{ selectedItem && selectedItem.length === 1 ? "" : "s" }}
+      </div>
+      <p-button
+        icon="pi pi-plus"
+        (click)="openNew()"
+        styleClass="p-button-rounded p-button-text"
+      ></p-button>
+      <p-button
+        icon="pi pi-trash"
+        (click)="deleteSelectedItem()"
+        [disabled]="!selectedItem || !selectedItem.length"
+        styleClass="p-button-rounded p-button-text"
+      ></p-button>
+      <p-button
+        icon="pi pi-chevron-left"
+        styleClass="p-button-rounded p-button-text"
+      ></p-button>
+      <p-button
+        icon="pi pi-refresh"
+        styleClass="p-button-rounded p-button-text"
+      ></p-button>
+      <p-button
+        icon="pi pi-chevron-right"
+        styleClass="p-button-rounded p-button-text"
+      ></p-button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    #dt
+    [value]="items"
+    [rows]="5"
+    [paginator]="true"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [(selection)]="selectedItem"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="{first} al {last} de {totalRecords}"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[1, 5, 10, 20]"
+  >
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8" class="text-center">
+          Tu lista esta vacia, agrega los equipos a solicitar para poder
+          continuar.
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 4rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th style="width: 200px">Imagen</th>
+        <th pSortableColumn="name" style="width: 20rem">
+          Nombre<p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="brand" style="min-width: 15em">
+          Marca<p-sortIcon field="brand"></p-sortIcon>
+        </th>
+        <th pSortableColumn="folio" style="min-width: 2rem">
+          Folio<p-sortIcon field="folio"></p-sortIcon>
+        </th>
+        <th pSortableColumn="category" style="min-width: 10rem">
+          Categoria<p-sortIcon field="category"></p-sortIcon>
+        </th>
+        <th pSortableColumn="quantity" style="min-width: 2rem">
+          Cantidad<p-sortIcon field="quantity"></p-sortIcon>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="item"></p-tableCheckbox>
+        </td>
+        <td>
+          <img
+            [src]="'/assets/' + item.image"
+            [alt]="item.name"
+            width="100"
+            class="shadow"
+          />
+        </td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.brand }}</td>
+        <td>{{ item.folio }}</td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-success mr-2"
+            (click)="editItem(item)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<p-dialog
+  [(visible)]="itemDialog"
+  [style]="{ width: '450px' }"
+  header="item Details"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <img
+      [src]="'/assets/' + item.image"
+      [alt]="item.image"
+      class="block m-auto pb-3"
+      *ngIf="item.image"
+      width="100"
+      class="shadow-4"
+    />
+    <div class="field">
+      <label for="name">Nombre</label>
+      <input
+        type="text"
+        pInputText
+        id="name"
+        [(ngModel)]="item.name"
+        required
+        autofocus
+      />
+      <small class="p-error" *ngIf="submitted && !item.name"
+        >Nombre obligatorio.</small
+      >
+    </div>
+    <div class="field">
+      <label for="description">Descripcion</label>
+      <textarea
+        id="description"
+        pInputTextarea
+        [(ngModel)]="item.description"
+        required
+        rows="3"
+        cols="20"
+      ></textarea>
+    </div>
+
+    <div class="field">
+      <label for="inventoryStatus">Estado del inventario</label>
+      <p-dropdown
+        [(ngModel)]="item.inventoryStatus"
+        inputId="inventoryStatus"
+        [options]="statuses"
+      >
+        <ng-template pTemplate="selectedItem" let-item>
+          <p-tag
+            [value]="item?.inventoryStatus?.toUpperCase() || 'Unknown'"
+            [severity]="getSeverity(item?.inventoryStatus?.toUpperCase())"
+          ></p-tag>
+        </ng-template>
+        <ng-template let-option pTemplate="item">
+          <p-tag
+            [value]="option.label"
+            [severity]="getSeverity(option.label)"
+          ></p-tag>
+        </ng-template>
+      </p-dropdown>
+    </div>
+
+    <div class="formgrid grid">
+      <div class="field col">
+        <label for="quantity">Cantidad</label>
+        <p-inputNumber
+          id="quantity"
+          [(ngModel)]="item.quantity"
+        ></p-inputNumber>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancelar"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Guardar cambios"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="saveItem()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

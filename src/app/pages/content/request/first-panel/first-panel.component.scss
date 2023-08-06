@@ -76,3 +76,33 @@
   transform-origin: center;
   filter: brightness(100%);
 }
+
+:host ::ng-deep .p-dialog .item-image {
+  width: 150px;
+  margin: 0 auto 2rem auto;
+  display: block;
+}
+
+::ng-deep .toolbar {
+  display: flex;
+  align-items: center;
+  background-color: #f2f6fc;
+  border: 0px;
+  border-radius: 100px;
+  padding: 5px;
+}
+
+::ng-deep p-toolbar .toolbar p-button {
+  margin-right: 8px;
+  --p-button-secondary-color: var(--dark-color);
+  --p-button-secondary-border-color: var(--dark-color);
+  color: #fff;
+}
+
+::ng-deep .toolbar .flex {
+  flex: 1;
+}
+
+::ng-deep .toolbar .flex div {
+  margin-left: 16px;
+}
