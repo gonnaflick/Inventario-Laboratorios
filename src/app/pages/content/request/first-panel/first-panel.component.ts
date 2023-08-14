@@ -11,18 +11,12 @@ import { CourseService } from 'src/app/pages/services/course.service';
 import { Course } from 'src/app/pages/interface/course.interface';
 import { SelectItemGroup } from 'primeng/api';
 import { FormGroup } from '@angular/forms';
-import { Observable, Subject, merge, OperatorFunction } from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  map,
-} from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Item } from 'src/app/pages/interface/item.interface';
 import { ItemService } from 'src/app/pages/services/item.service';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-first-panel',
@@ -32,18 +26,15 @@ import { ItemService } from 'src/app/pages/services/item.service';
 })
 export class FirstPanelComponent implements OnDestroy, OnInit {
   @ViewChild('instance', { static: true }) instance: NgbTypeahead | undefined;
+  @ViewChild('dt') table: Table | undefined; // Reference to the Table component
   @Output() formValid = new EventEmitter<boolean>();
-
-  focus$ = new Subject<string>();
-  click$ = new Subject<string>();
-
-  firstStepForm: FormGroup;
-  filteredCourses: SelectItemGroup[] = [];
-  courses!: Course[];
 
   private mediaDevices: MediaDeviceInfo[] = [];
   private cameraLabels: { [deviceId: string]: string } = {};
   private hasDevices: boolean | undefined;
+
+  firstStepForm: FormGroup;
+  courses!: Course[];
 
   availableCameras?: MediaDeviceInfo[];
   currentCamera: MediaDeviceInfo | undefined;
@@ -60,8 +51,12 @@ export class FirstPanelComponent implements OnDestroy, OnInit {
   submitted: boolean = false;
   statuses!: any[];
 
-  first = 0;
-  rows = 5;
+  selectedGroup: any; // Initialize this variable to null or undefined initially
+  selectedClass: any;
+  selectedProfessor: any;
+
+  loading: boolean = false;
+  activityValues: number[] = [0, 100];
 
   public errorMessage = {
     nameControl: [
@@ -90,7 +85,10 @@ export class FirstPanelComponent implements OnDestroy, OnInit {
     private confirmationService: ConfirmationService
   ) {
     this.firstStepForm = this.formService.firstStepForm;
-    this.courseService.getCourses().then((data) => (this.courses = data));
+
+    this.courseService.getCourses().then((courses) => {
+      this.courses = courses;
+    });
   }
 
   ngOnInit() {
@@ -108,36 +106,23 @@ export class FirstPanelComponent implements OnDestroy, OnInit {
     ];
   }
 
-  search: OperatorFunction<
-    string,
-    readonly { name: string; professor: string }[]
-  > = (text$: Observable<string>) => {
-    const debouncedText$ = text$.pipe(
-      debounceTime(200),
-      distinctUntilChanged()
-    );
-    const clicksWithClosedPopup$ = this.click$.pipe(
-      filter(() => !this.instance?.isPopupOpen())
-    );
-    const inputFocus$ = this.focus$;
+  clear(table: Table) {
+    table.clear();
+  }
 
-    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-      filter((term) => term === '' || term.length >= 2),
-      map((term) => {
-        if (term === '') {
-          return this.courses;
-        } else {
-          return this.courses
-            .filter((course) =>
-              course.name.toLowerCase().includes(term.toLowerCase())
-            )
-            .slice(0, 10);
-        }
-      })
-    );
-  };
+  onGroupSelect(selectedGroup: any) {
+    this.selectedGroup = selectedGroup;
+    this.selectedClass = null; // Reset the value of selectedClass when group changes
+    this.selectedProfessor = null; // Reset the value of selectedProfessor when group changes
+    this.firstStepForm.get('class')?.reset(); // Reset the value of the class form control
+    this.firstStepForm.get('professor')?.reset(); // Reset the value of the professor form control
+  }
 
-  formatter = (x: { name: string }) => x.name;
+  onClassSelect(selectedClass: any) {
+    this.selectedClass = selectedClass;
+    this.selectedProfessor = null; // Reset the value of selectedProfessor when class changes
+    this.firstStepForm.get('professor')?.reset(); // Reset the value of the professor form control
+  }
 
   showError(controlName: string, errorType: string): boolean {
     const controlErrors = this.firstStepForm.get(controlName)?.errors;
@@ -387,5 +372,22 @@ export class FirstPanelComponent implements OnDestroy, OnInit {
 
   clearSelection() {
     this.selectedItem = null;
+  }
+
+  goToPreviousPage(): void {
+    if (this.table!.first > 0) {
+      this.table!.first -= this.table!.rows;
+    }
+  }
+
+  resetTable(): void {
+    this.table!.first = 0;
+  }
+
+  goToNextPage(): void {
+    const totalPages = Math.ceil(this.table!.totalRecords / this.table!.rows);
+    if (this.table!.first + this.table!.rows < this.table!.totalRecords) {
+      this.table!.first += this.table!.rows;
+    }
   }
 }

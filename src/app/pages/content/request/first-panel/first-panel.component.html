@@ -3,7 +3,7 @@
     <form [formGroup]="firstStepForm" class="w-75 needs-validation">
       <h4 class="fs-2 mb-2">Solicitante</h4>
       <h5 class="fs-6 mb-4">Ingrese toda la información del solicitante</h5>
-      <div class="col-md-4 mb-3">
+      <div>
         <label for="name">Nombre</label>
         <input
           type="text"
@@ -53,7 +53,7 @@
         </div>
       </div>
 
-      <div class="col-md-4 mb-3">
+      <div>
         <label for="name">Apellido</label>
         <input
           type="text"
@@ -103,7 +103,7 @@
         </div>
       </div>
 
-      <div class="col-md-4 mb-3">
+      <div>
         <label for="name">Matricula</label>
         <input
           type="text"
@@ -153,62 +153,47 @@
         </div>
       </div>
 
-      <div class="col-md-4 mb-3">
-        <label for="course">Materia</label>
+      <div>
+        <div>
+          <label>Materia</label>
+          <!-- Group Dropdown -->
+          <p-dropdown
+            formControlName="group"
+            [options]="courses"
+            optionLabel="group"
+            [filter]="true"
+            filterBy="group"
+            [showClear]="true"
+            placeholder="Seleccione el grupo"
+            (onChange)="onGroupSelect($event.value)"
+          >
+            <!-- Template code for selected item and items -->
+          </p-dropdown>
 
-        <input
-          id="typeahead-focus"
-          type="text"
-          class="form-control"
-          formControlName="course"
-          [ngbTypeahead]="search"
-          [inputFormatter]="formatter"
-          [resultTemplate]="rt"
-          (focus)="focus$.next($any($event).target.value)"
-          (click)="click$.next($any($event).target.value)"
-          [ngClass]="{
-            'is-invalid':
-              this.firstStepForm.controls['course'].invalid &&
-              (this.firstStepForm.controls['course'].touched ||
-                this.firstStepForm.controls['course'].dirty),
-            'is-valid':
-              this.firstStepForm.controls['course'].valid &&
-              (this.firstStepForm.controls['course'].touched ||
-                this.firstStepForm.controls['course'].dirty)
-          }"
-        />
+          <!-- Class Dropdown -->
+          <p-dropdown
+            formControlName="class"
+            [options]="courses"
+            optionLabel="class"
+            [filter]="true"
+            filterBy="class"
+            [showClear]="true"
+            placeholder="Seleccione la clase"
+            (onChange)="onClassSelect($event.value)"
+          >
+            <!-- Template code for selected item and items -->
+          </p-dropdown>
 
-        <ng-template #rt let-r="result" let-t="term">
-          <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight><br />
-          <span>{{ r.professor }}</span>
-        </ng-template>
-
-        <div
-          class="invalid-feedback"
-          *ngIf="
-            this.firstStepForm.controls['course'].hasError('pattern') &&
-            (this.firstStepForm.controls['course'].touched ||
-              this.firstStepForm.controls['course'].dirty) &&
-            showError('course', 'pattern')
-          "
-          id="course-pattern-help"
-          class="form-text text-danger"
-        >
-          {{ errorMessage.courseControl[0].message }}
-        </div>
-
-        <div
-          class="invalid-feedback"
-          *ngIf="
-            this.firstStepForm.controls['course'].hasError('required') &&
-            (this.firstStepForm.controls['course'].touched ||
-              this.firstStepForm.controls['course'].dirty) &&
-            showError('course', 'required')
-          "
-          id="course-required-help"
-          class="form-text text-danger"
-        >
-          {{ errorMessage.courseControl[1].message }}
+          <!-- Professor Dropdown -->
+          <p-dropdown
+            formControlName="professor"
+            [options]="courses"
+            optionLabel="professor"
+            [filter]="true"
+            filterBy="professor"
+            [showClear]="true"
+            placeholder="Seleccione el profesor"
+          ></p-dropdown>
         </div>
       </div>
 
@@ -318,14 +303,17 @@
         styleClass="p-button-rounded p-button-text"
       ></p-button>
       <p-button
+        (click)="goToPreviousPage()"
         icon="pi pi-chevron-left"
         styleClass="p-button-rounded p-button-text"
       ></p-button>
       <p-button
+        (click)="resetTable()"
         icon="pi pi-refresh"
         styleClass="p-button-rounded p-button-text"
       ></p-button>
       <p-button
+        (click)="goToNextPage()"
         icon="pi pi-chevron-right"
         styleClass="p-button-rounded p-button-text"
       ></p-button>
@@ -335,15 +323,15 @@
   <p-table
     #dt
     [value]="items"
-    [rows]="5"
     [paginator]="true"
     [tableStyle]="{ 'min-width': '50rem' }"
     [(selection)]="selectedItem"
     [rowHover]="true"
-    dataKey="id"
-    currentPageReportTemplate="{first} al {last} de {totalRecords}"
+    [rows]="5"
     [showCurrentPageReport]="true"
     [rowsPerPageOptions]="[1, 5, 10, 20]"
+    dataKey="id"
+    currentPageReportTemplate="{first} al {last} de {totalRecords}"
   >
     <ng-template pTemplate="emptymessage">
       <tr>
@@ -410,6 +398,7 @@
     </ng-template>
   </p-table>
 </div>
+
 <p-dialog
   [(visible)]="itemDialog"
   [style]="{ width: '450px' }"
@@ -506,3 +495,372 @@
 </p-dialog>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+
+<p-table
+  #dt2
+  [value]="items"
+  dataKey="id"
+  [rows]="10"
+  [showCurrentPageReport]="true"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [loading]="loading"
+  [paginator]="true"
+  currentPageReportTemplate="{first} al {last} de {totalRecords}"
+  [globalFilterFields]="[
+    'name',
+    'description',
+    'brand',
+    'category',
+    'inventoryStatus',
+    'quantity'
+  ]"
+  [tableStyle]="{ 'min-width': '75rem' }"
+>
+  <ng-template pTemplate="caption">
+    <div class="flex">
+      <span class="p-input-icon-left ml-auto">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="dt2.filterGlobal($any($event.target).value, 'contains')"
+          placeholder="Busqueda global..."
+        />
+      </span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Imagen</th>
+      <th>Nombre</th>
+      <th>Descripcion</th>
+      <th>Marca</th>
+      <th>Categoria</th>
+      <th>Estado</th>
+      <th>Cantidad</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>
+        <p-columnFilter type="text" field="name"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="description"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter field="brand" matchMode="in" [showMenu]="false">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-multiSelect
+              [ngModel]="value"
+              [options]="items"
+              placeholder="Any"
+              (onChange)="filter($event.value)"
+              optionLabel="brand"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="inline-block vertical-align-middle">
+                  <span class="ml-1 mt-1">{{ option.brand }}</span>
+                </div>
+              </ng-template>
+            </p-multiSelect>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter field="category" matchMode="in" [showMenu]="false">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-multiSelect
+              [ngModel]="value"
+              [options]="items"
+              placeholder="Any"
+              (onChange)="filter($event.value)"
+              optionLabel="category"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="inline-block vertical-align-middle">
+                  <span class="ml-1 mt-1">{{ option.category }}</span>
+                </div>
+              </ng-template>
+            </p-multiSelect>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter
+          field="items.inventoryStatus"
+          matchMode="equals"
+          [showMenu]="false"
+        >
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-dropdown
+              [ngModel]="value"
+              [options]="items"
+              (onChange)="filter($event.value)"
+              placeholder="Any"
+              [showClear]="true"
+            >
+              <ng-template let-option pTemplate="item">
+                <p-tag
+                  [value]="option.inventoryStatus"
+                  [severity]="getSeverity(option.inventoryStatus)"
+                ></p-tag>
+              </ng-template>
+            </p-dropdown>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="items.quantity"></p-columnFilter>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-item>
+    <tr>
+      <td>
+        <img
+          [src]="'/assets/' + item.image"
+          [alt]="item.name"
+          width="100"
+          class="shadow"
+        />
+      </td>
+      <td>
+        {{ item.name }}
+      </td>
+      <td>
+        {{ item.description }}
+      </td>
+      <td>
+        <span class="ml-1 vertical-align-middle">{{ item.brand }}</span>
+      </td>
+      <td>
+        <span class="ml-1 vertical-align-middle">{{ item.category }}</span>
+      </td>
+      <td>
+        <p-tag
+          [value]="item.inventoryStatus"
+          [severity]="getSeverity(item.inventoryStatus)"
+        ></p-tag>
+      </td>
+
+      <td>
+        {{ item.quantity }}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="5">No se encontraron equipos en la base de datos.</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-table
+  #dt1
+  [value]="items"
+  dataKey="id"
+  [rows]="10"
+  [showCurrentPageReport]="true"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [loading]="loading"
+  [paginator]="true"
+  currentPageReportTemplate="{first} al {last} de {totalRecords}"
+  [globalFilterFields]="[
+    'name',
+    'description',
+    'brand',
+    'category',
+    'inventoryStatus',
+    'quantity'
+  ]"
+>
+  <ng-template pTemplate="caption">
+    <div class="flex">
+      <button
+        pButton
+        label="Clear"
+        class="p-button-outlined"
+        icon="pi pi-filter-slash"
+        (click)="clear(dt1)"
+      ></button>
+      <span class="p-input-icon-left ml-auto">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
+          placeholder="Busqueda global..."
+        />
+      </span>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Imagen</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>Estado</th>
+      <th>Cantidad</th>
+
+      <th style="min-width: 15rem">
+        <div class="flex align-items-center">
+          Nombre
+          <p-columnFilter
+            type="text"
+            field="name"
+            display="menu"
+          ></p-columnFilter>
+        </div>
+      </th>
+      <th style="min-width: 15rem">
+        <div class="flex align-items-center">
+          Descripcion
+          <p-columnFilter
+            type="text"
+            field="country.name"
+            display="menu"
+          ></p-columnFilter>
+        </div>
+      </th>
+      <th style="min-width: 15rem">
+        <div class="flex align-items-center">
+          Marca
+          <p-columnFilter
+            field="representative"
+            matchMode="in"
+            display="menu"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+          >
+            <ng-template pTemplate="header">
+              <div class="px-3 pt-3 pb-0">
+                <span class="font-bold">Agent Picker</span>
+              </div>
+            </ng-template>
+            <ng-template
+              pTemplate="filter"
+              let-value
+              let-filter="filterCallback"
+            >
+              <p-multiSelect
+                [ngModel]="value"
+                [options]="representatives"
+                placeholder="Any"
+                (onChange)="filter($event.value)"
+                optionLabel="name"
+              >
+                <ng-template let-option pTemplate="item">
+                  <div class="inline-block vertical-align-middle">
+                    <img
+                      [alt]="option.label"
+                      src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{
+                        option.image
+                      }}"
+                      width="24"
+                      class="vertical-align-middle"
+                    />
+                    <span class="ml-1 mt-1">{{ option.name }}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+      <th style="min-width: 10rem">
+        <div class="flex align-items-center">
+          Estado
+          <p-columnFilter field="status" matchMode="equals" display="menu">
+            <ng-template
+              pTemplate="filter"
+              let-value
+              let-filter="filterCallback"
+            >
+              <p-dropdown
+                [ngModel]="value"
+                [options]="statuses"
+                (onChange)="filter($event.value)"
+                placeholder="Any"
+              >
+                <ng-template let-option pTemplate="item">
+                  <p-tag
+                    [value]="option.value"
+                    [severity]="getSeverity(option.label)"
+                  ></p-tag>
+                </ng-template>
+              </p-dropdown>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-customer>
+    <tr>
+      <td>
+        {{ customer.name }}
+      </td>
+      <td>
+        <img
+          src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+          [class]="'flag flag-' + customer.country.code"
+          style="width: 20px"
+        />
+        <span class="ml-1 vertical-align-middle">{{
+          customer.country.name
+        }}</span>
+      </td>
+      <td>
+        <img
+          [alt]="customer.representative.name"
+          src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{
+            customer.representative.image
+          }}"
+          width="32"
+          style="vertical-align: middle"
+        />
+        <span class="ml-1 vertical-align-middle">{{
+          customer.representative.name
+        }}</span>
+      </td>
+      <td>
+        {{ customer.date | date : "MM/dd/yyyy" }}
+      </td>
+      <td>
+        {{ customer.balance | currency : "USD" : "symbol" }}
+      </td>
+      <td>
+        <p-tag
+          [value]="customer.status"
+          [severity]="getSeverity(customer.status)"
+        ></p-tag>
+      </td>
+      <td>
+        <p-progressBar
+          [value]="customer.activity"
+          [showValue]="false"
+        ></p-progressBar>
+      </td>
+      <td class="text-center">
+        <i
+          class="pi"
+          [ngClass]="{
+            'text-green-500 pi-check-circle': customer.verified,
+            'text-red-500 pi-times-circle': !customer.verified
+          }"
+        ></i>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="7">No customers found.</td>
+    </tr>
+  </ng-template>
+</p-table>

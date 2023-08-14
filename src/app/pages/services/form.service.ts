@@ -7,7 +7,6 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { Course } from 'src/app/pages/interface/course.interface';
-import { CourseService } from 'src/app/pages/services/course.service';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +31,9 @@ export class FormService {
       Validators.required,
       Validators.pattern('^[0-9]{6,6}$'),
     ]),
-    course: this._formBuilder.control('', Validators.required),
+    group: this._formBuilder.control('', Validators.required),
+    class: this._formBuilder.control('', Validators.required),
+    professor: this._formBuilder.control('', Validators.required),
     scannedQR: new FormControl('', [
       this.validateScannedLink(),
       Validators.required,
@@ -45,31 +46,7 @@ export class FormService {
 
   fourthStepForm = this._formBuilder.group({});
 
-  constructor(
-    private _formBuilder: FormBuilder,
-    private courseService: CourseService
-  ) {
-    this.courseService.getCourses().then((data) => {
-      this.courses = data;
-      this.firstStepForm
-        .get('course')!
-        .setValidators([this.requireMatch(this.courses), Validators.required]);
-    });
-  }
-
-  requireMatch(courses: Course[]): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      const selectedCourse = control.value.name;
-
-      if (Validators.required(control) && !selectedCourse) {
-        return { required: { value: control.value.name } };
-      }
-
-      const isValid = courses.some((course) => course.name === selectedCourse);
-
-      return isValid ? null : { pattern: { value: control.value.name } };
-    };
-  }
+  constructor(private _formBuilder: FormBuilder) {}
 
   validateScannedLink(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {

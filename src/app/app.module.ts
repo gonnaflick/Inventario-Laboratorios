@@ -105,8 +105,6 @@ import { ThirdPanelComponent } from './pages/content/request/third-panel/third-p
 import { FourthPanelComponent } from './pages/content/request/fourth-panel/fourth-panel.component';
 
 import { FormService } from './pages/services/form.service';
-import { ModalComponent } from './pages/components/modal/modal.component';
-import { ModalService } from './pages/services/modal.service';
 import { CourseService } from './pages/services/course.service';
 import { ItemService } from './pages/services/item.service';
 
@@ -118,7 +116,6 @@ import { ItemService } from './pages/services/item.service';
     SecondPanelComponent,
     ThirdPanelComponent,
     FourthPanelComponent,
-    ModalComponent,
   ],
   imports: [
     AutoCompleteModule,
@@ -229,7 +226,7 @@ import { ItemService } from './pages/services/item.service';
     CardModule,
     RouterModule,
   ],
-  providers: [FormService, ModalService, CourseService, ItemService],
+  providers: [FormService, CourseService, ItemService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
