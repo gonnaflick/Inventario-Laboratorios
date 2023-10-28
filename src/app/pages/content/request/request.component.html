@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="content">
+    <div *ngIf="selectedIndex === 0">
+      <div id="first-panel">
+        <app-first-panel
+          (formValid)="handleFormValid($event)"
+        ></app-first-panel>
+      </div>
+    </div>
+    <div *ngIf="selectedIndex === 1">
+      <div id="second-panel">
+        <app-second-panel
+          (formValid)="handleFormValid($event)"
+        ></app-second-panel>
+      </div>
+    </div>
+    <div *ngIf="selectedIndex === 2">
+      <div id="third-panel">
+        <app-third-panel
+          (formValid)="handleFormValid($event)"
+        ></app-third-panel>
+      </div>
+    </div>
+    <div *ngIf="selectedIndex === 3">
+      <div id="fourth-panel">
+        <app-fourth-panel
+          (formValid)="handleFormValid($event)"
+        ></app-fourth-panel>
+      </div>
+    </div>
+    <div *ngIf="selectedIndex === 4">
+      <div id="end-panel">FINISH</div>
+    </div>
+  </div>
+</div>

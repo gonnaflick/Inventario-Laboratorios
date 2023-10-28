@@ -1,0 +1,866 @@
+<div class="row w-100 gy-4 mt-4">
+  <div class="col-lg-5 col-md-12 align-items-center justify-content-center">
+    <form [formGroup]="firstStepForm" class="w-75 needs-validation">
+      <h4 class="fs-2 mb-2">Solicitante</h4>
+      <h5 class="fs-6 mb-4">Ingrese toda la información del solicitante</h5>
+      <div>
+        <label for="name">Nombre</label>
+        <input
+          type="text"
+          formControlName="name"
+          maxlength="50"
+          id="name"
+          required
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              this.firstStepForm.controls['name'].invalid &&
+              (this.firstStepForm.controls['name'].touched ||
+                this.firstStepForm.controls['name'].dirty),
+            'is-valid':
+              this.firstStepForm.controls['name'].valid &&
+              (this.firstStepForm.controls['name'].touched ||
+                this.firstStepForm.controls['name'].dirty)
+          }"
+        />
+
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            this.firstStepForm.controls['name'].hasError('pattern') &&
+            (this.firstStepForm.controls['name'].touched ||
+              this.firstStepForm.controls['name'].dirty) &&
+            showError('name', 'pattern')
+          "
+          id="name-pattern-help"
+          class="form-text text-danger"
+        >
+          {{ errorMessage.nameControl[0].message }}
+        </div>
+
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            this.firstStepForm.controls['name'].hasError('required') &&
+            (this.firstStepForm.controls['name'].touched ||
+              this.firstStepForm.controls['name'].dirty) &&
+            showError('name', 'required')
+          "
+          id="name-required-help"
+          class="form-text text-danger"
+        >
+          {{ errorMessage.nameControl[1].message }}
+        </div>
+      </div>
+
+      <div>
+        <label for="name">Apellido</label>
+        <input
+          type="text"
+          formControlName="lastname"
+          maxlength="50"
+          id="lastname"
+          required
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              this.firstStepForm.controls['lastname'].invalid &&
+              (this.firstStepForm.controls['lastname'].touched ||
+                this.firstStepForm.controls['lastname'].dirty),
+            'is-valid':
+              this.firstStepForm.controls['lastname'].valid &&
+              (this.firstStepForm.controls['lastname'].touched ||
+                this.firstStepForm.controls['lastname'].dirty)
+          }"
+        />
+
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            this.firstStepForm.controls['lastname'].hasError('pattern') &&
+            (this.firstStepForm.controls['lastname'].touched ||
+              this.firstStepForm.controls['lastname'].dirty) &&
+            showError('lastname', 'pattern')
+          "
+          id="lastname-pattern-help"
+          class="form-text text-danger"
+        >
+          {{ errorMessage.lastnameControl[0].message }}
+        </div>
+
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            this.firstStepForm.controls['lastname'].hasError('required') &&
+            (this.firstStepForm.controls['lastname'].touched ||
+              this.firstStepForm.controls['lastname'].dirty) &&
+            showError('lastname', 'required')
+          "
+          id="lastname-required-help"
+          class="form-text text-danger"
+        >
+          {{ errorMessage.lastnameControl[1].message }}
+        </div>
+      </div>
+
+      <div>
+        <label for="name">Matricula</label>
+        <input
+          type="text"
+          formControlName="studentId"
+          maxlength="6"
+          id="studentId"
+          required
+          class="form-control"
+          [ngClass]="{
+            'is-invalid':
+              this.firstStepForm.controls['studentId'].invalid &&
+              (this.firstStepForm.controls['studentId'].touched ||
+                this.firstStepForm.controls['studentId'].dirty),
+            'is-valid':
+              this.firstStepForm.controls['studentId'].valid &&
+              (this.firstStepForm.controls['studentId'].touched ||
+                this.firstStepForm.controls['studentId'].dirty)
+          }"
+        />
+
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            this.firstStepForm.controls['studentId'].hasError('pattern') &&
+            (this.firstStepForm.controls['studentId'].touched ||
+              this.firstStepForm.controls['studentId'].dirty) &&
+            showError('studentId', 'pattern')
+          "
+          id="studentId-pattern-help"
+          class="form-text text-danger"
+        >
+          {{ errorMessage.studentIdControl[0].message }}
+        </div>
+
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            this.firstStepForm.controls['studentId'].hasError('required') &&
+            (this.firstStepForm.controls['studentId'].touched ||
+              this.firstStepForm.controls['studentId'].dirty) &&
+            showError('studentId', 'required')
+          "
+          id="studentId-required-help"
+          class="form-text text-danger"
+        >
+          {{ errorMessage.studentIdControl[1].message }}
+        </div>
+      </div>
+
+      <div>
+        <div>
+          <label>Materia</label>
+          <!-- Group Dropdown -->
+          <p-dropdown
+            formControlName="group"
+            [options]="courses"
+            optionLabel="group"
+            [filter]="true"
+            filterBy="group"
+            [showClear]="true"
+            placeholder="Seleccione el grupo"
+            (onChange)="onGroupSelect($event.value)"
+          >
+            <!-- Template code for selected item and items -->
+          </p-dropdown>
+
+          <!-- Class Dropdown -->
+          <p-dropdown
+            formControlName="class"
+            [options]="courses"
+            optionLabel="class"
+            [filter]="true"
+            filterBy="class"
+            [showClear]="true"
+            placeholder="Seleccione la clase"
+            (onChange)="onClassSelect($event.value)"
+          >
+            <!-- Template code for selected item and items -->
+          </p-dropdown>
+
+          <!-- Professor Dropdown -->
+          <p-dropdown
+            formControlName="professor"
+            [options]="courses"
+            optionLabel="professor"
+            [filter]="true"
+            filterBy="professor"
+            [showClear]="true"
+            placeholder="Seleccione el profesor"
+          ></p-dropdown>
+        </div>
+      </div>
+
+      <div class="scanner-container">
+        <div class="scan-square"></div>
+        <zxing-scanner
+          [enable]="scannerEnabled"
+          [(device)]="currentCamera"
+          (scanSuccess)="scanSuccessHandler($event)"
+          (permissionResponse)="onHasPermission($event)"
+          (hasDevices)="onHasDevices($event)"
+          class="scan-video"
+        >
+        </zxing-scanner>
+      </div>
+
+      <input
+        readonly
+        aria-describedby="basic-addon2"
+        type="text"
+        formControlName="scannedQR"
+        id="scannedQR"
+        required
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            this.firstStepForm.controls['scannedQR'].invalid &&
+            this.firstStepForm.controls['scannedQR'].valueChanges &&
+            hasScanned,
+          'is-valid':
+            this.firstStepForm.controls['scannedQR'].valid &&
+            this.firstStepForm.controls['scannedQR'].valueChanges &&
+            hasScanned
+        }"
+      />
+
+      <div>
+        <button
+          class="btn btn-secondary"
+          (click)="openLink()"
+          [disabled]="!scanSuccess"
+        >
+          Abrir enlace
+        </button>
+      </div>
+
+      <select
+        class="form-select"
+        *ngIf="hasPermission === true"
+        #list
+        (change)="onCameraSelectChange(list.value)"
+      >
+        <option value="" [selected]="!currentCamera">Camara desactivada</option>
+        <option
+          *ngFor="let camera of availableCameras"
+          [value]="camera.deviceId"
+          [selected]="
+            currentCamera && camera.deviceId === currentCamera.deviceId
+          "
+        >
+          {{ getCameraLabel(camera) }}
+        </option>
+      </select>
+
+      <ng-container *ngIf="hasPermission === undefined">
+        <h2>Solicitud de permisos</h2>
+        <p>Se requiere acceso a la cámara para utilizar el escáner.</p>
+        <p>Haz clic en "Aceptar" para permitir el acceso a la cámara.</p>
+      </ng-container>
+
+      <div>
+        <button
+          class="btn btn-outline-primary"
+          type="button"
+          (click)="submitForm()"
+        >
+          Siguiente
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <h4 class="fs-4 mb-4">Lista de equipo a solicitar</h4>
+  <p-toast></p-toast>
+  <p-toolbar styleClass="toolbar mb-4 gap-2">
+    <ng-template pTemplate="left">
+      <p-button
+        icon="pi pi-times"
+        (click)="clearSelection()"
+        styleClass="p-button-rounded p-button-text"
+      ></p-button>
+      <div class="flex align-items-center justify-content-between">
+        {{ selectedItem ? selectedItem.length : 0 }}
+        seleccionado{{ selectedItem && selectedItem.length === 1 ? "" : "s" }}
+      </div>
+      <p-button
+        icon="pi pi-plus"
+        (click)="openNew()"
+        styleClass="p-button-rounded p-button-text"
+      ></p-button>
+      <p-button
+        icon="pi pi-trash"
+        (click)="deleteSelectedItem()"
+        [disabled]="!selectedItem || !selectedItem.length"
+        styleClass="p-button-rounded p-button-text"
+      ></p-button>
+      <p-button
+        (click)="goToPreviousPage()"
+        icon="pi pi-chevron-left"
+        styleClass="p-button-rounded p-button-text"
+      ></p-button>
+      <p-button
+        (click)="resetTable()"
+        icon="pi pi-refresh"
+        styleClass="p-button-rounded p-button-text"
+      ></p-button>
+      <p-button
+        (click)="goToNextPage()"
+        icon="pi pi-chevron-right"
+        styleClass="p-button-rounded p-button-text"
+      ></p-button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    #dt
+    [value]="items"
+    [paginator]="true"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [(selection)]="selectedItem"
+    [rowHover]="true"
+    [rows]="5"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[1, 5, 10, 20]"
+    dataKey="id"
+    currentPageReportTemplate="{first} al {last} de {totalRecords}"
+  >
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8" class="text-center">
+          Tu lista esta vacia, agrega los equipos a solicitar para poder
+          continuar.
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 4rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th style="width: 200px">Imagen</th>
+        <th pSortableColumn="name" style="width: 20rem">
+          Nombre<p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="brand" style="min-width: 15em">
+          Marca<p-sortIcon field="brand"></p-sortIcon>
+        </th>
+        <th pSortableColumn="folio" style="min-width: 2rem">
+          Folio<p-sortIcon field="folio"></p-sortIcon>
+        </th>
+        <th pSortableColumn="category" style="min-width: 10rem">
+          Categoria<p-sortIcon field="category"></p-sortIcon>
+        </th>
+        <th pSortableColumn="quantity" style="min-width: 2rem">
+          Cantidad<p-sortIcon field="quantity"></p-sortIcon>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="item"></p-tableCheckbox>
+        </td>
+        <td>
+          <img
+            [src]="'/assets/' + item.image"
+            [alt]="item.name"
+            width="100"
+            class="shadow"
+          />
+        </td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.brand }}</td>
+        <td>{{ item.folio }}</td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-success mr-2"
+            (click)="editItem(item)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="itemDialog"
+  [style]="{ width: '450px' }"
+  header="item Details"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <img
+      [src]="'/assets/' + item.image"
+      [alt]="item.image"
+      class="block m-auto pb-3"
+      *ngIf="item.image"
+      width="100"
+      class="shadow-4"
+    />
+    <div class="field">
+      <label for="name">Nombre</label>
+      <input
+        type="text"
+        pInputText
+        id="name"
+        [(ngModel)]="item.name"
+        required
+        autofocus
+      />
+      <small class="p-error" *ngIf="submitted && !item.name"
+        >Nombre obligatorio.</small
+      >
+    </div>
+    <div class="field">
+      <label for="description">Descripcion</label>
+      <textarea
+        id="description"
+        pInputTextarea
+        [(ngModel)]="item.description"
+        required
+        rows="3"
+        cols="20"
+      ></textarea>
+    </div>
+
+    <div class="field">
+      <label for="inventoryStatus">Estado del inventario</label>
+      <p-dropdown
+        [(ngModel)]="item.inventoryStatus"
+        inputId="inventoryStatus"
+        [options]="statuses"
+      >
+        <ng-template pTemplate="selectedItem" let-item>
+          <p-tag
+            [value]="item?.inventoryStatus?.toUpperCase() || 'Unknown'"
+            [severity]="getSeverity(item?.inventoryStatus?.toUpperCase())"
+          ></p-tag>
+        </ng-template>
+        <ng-template let-option pTemplate="item">
+          <p-tag
+            [value]="option.label"
+            [severity]="getSeverity(option.label)"
+          ></p-tag>
+        </ng-template>
+      </p-dropdown>
+    </div>
+
+    <div class="formgrid grid">
+      <div class="field col">
+        <label for="quantity">Cantidad</label>
+        <p-inputNumber
+          id="quantity"
+          [(ngModel)]="item.quantity"
+        ></p-inputNumber>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancelar"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Guardar cambios"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="saveItem()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+
+<p-table
+  #dt2
+  [value]="items"
+  dataKey="id"
+  [rows]="10"
+  [showCurrentPageReport]="true"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [loading]="loading"
+  [paginator]="true"
+  currentPageReportTemplate="{first} al {last} de {totalRecords}"
+  [globalFilterFields]="[
+    'name',
+    'description',
+    'brand',
+    'category',
+    'inventoryStatus',
+    'quantity'
+  ]"
+  [tableStyle]="{ 'min-width': '75rem' }"
+>
+  <ng-template pTemplate="caption">
+    <div class="flex">
+      <span class="p-input-icon-left ml-auto">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="dt2.filterGlobal($any($event.target).value, 'contains')"
+          placeholder="Busqueda global..."
+        />
+      </span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Imagen</th>
+      <th>Nombre</th>
+      <th>Descripcion</th>
+      <th>Marca</th>
+      <th>Categoria</th>
+      <th>Estado</th>
+      <th>Cantidad</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>
+        <p-columnFilter type="text" field="name"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="description"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter field="brand" matchMode="in" [showMenu]="false">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-multiSelect
+              [ngModel]="value"
+              [options]="items"
+              placeholder="Any"
+              (onChange)="filter($event.value)"
+              optionLabel="brand"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="inline-block vertical-align-middle">
+                  <span class="ml-1 mt-1">{{ option.brand }}</span>
+                </div>
+              </ng-template>
+            </p-multiSelect>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter field="category" matchMode="in" [showMenu]="false">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-multiSelect
+              [ngModel]="value"
+              [options]="items"
+              placeholder="Any"
+              (onChange)="filter($event.value)"
+              optionLabel="category"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="inline-block vertical-align-middle">
+                  <span class="ml-1 mt-1">{{ option.category }}</span>
+                </div>
+              </ng-template>
+            </p-multiSelect>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter
+          field="items.inventoryStatus"
+          matchMode="equals"
+          [showMenu]="false"
+        >
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-dropdown
+              [ngModel]="value"
+              [options]="items"
+              (onChange)="filter($event.value)"
+              placeholder="Any"
+              [showClear]="true"
+            >
+              <ng-template let-option pTemplate="item">
+                <p-tag
+                  [value]="option.inventoryStatus"
+                  [severity]="getSeverity(option.inventoryStatus)"
+                ></p-tag>
+              </ng-template>
+            </p-dropdown>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="items.quantity"></p-columnFilter>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-item>
+    <tr>
+      <td>
+        <img
+          [src]="'/assets/' + item.image"
+          [alt]="item.name"
+          width="100"
+          class="shadow"
+        />
+      </td>
+      <td>
+        {{ item.name }}
+      </td>
+      <td>
+        {{ item.description }}
+      </td>
+      <td>
+        <span class="ml-1 vertical-align-middle">{{ item.brand }}</span>
+      </td>
+      <td>
+        <span class="ml-1 vertical-align-middle">{{ item.category }}</span>
+      </td>
+      <td>
+        <p-tag
+          [value]="item.inventoryStatus"
+          [severity]="getSeverity(item.inventoryStatus)"
+        ></p-tag>
+      </td>
+
+      <td>
+        {{ item.quantity }}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="5">No se encontraron equipos en la base de datos.</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-table
+  #dt1
+  [value]="items"
+  dataKey="id"
+  [rows]="10"
+  [showCurrentPageReport]="true"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [loading]="loading"
+  [paginator]="true"
+  currentPageReportTemplate="{first} al {last} de {totalRecords}"
+  [globalFilterFields]="[
+    'name',
+    'description',
+    'brand',
+    'category',
+    'inventoryStatus',
+    'quantity'
+  ]"
+>
+  <ng-template pTemplate="caption">
+    <div class="flex">
+      <button
+        pButton
+        label="Clear"
+        class="p-button-outlined"
+        icon="pi pi-filter-slash"
+        (click)="clear(dt1)"
+      ></button>
+      <span class="p-input-icon-left ml-auto">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
+          placeholder="Busqueda global..."
+        />
+      </span>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Imagen</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>Estado</th>
+      <th>Cantidad</th>
+
+      <th style="min-width: 15rem">
+        <div class="flex align-items-center">
+          Nombre
+          <p-columnFilter
+            type="text"
+            field="name"
+            display="menu"
+          ></p-columnFilter>
+        </div>
+      </th>
+      <th style="min-width: 15rem">
+        <div class="flex align-items-center">
+          Descripcion
+          <p-columnFilter
+            type="text"
+            field="country.name"
+            display="menu"
+          ></p-columnFilter>
+        </div>
+      </th>
+      <th style="min-width: 15rem">
+        <div class="flex align-items-center">
+          Marca
+          <p-columnFilter
+            field="representative"
+            matchMode="in"
+            display="menu"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+          >
+            <ng-template pTemplate="header">
+              <div class="px-3 pt-3 pb-0">
+                <span class="font-bold">Agent Picker</span>
+              </div>
+            </ng-template>
+            <ng-template
+              pTemplate="filter"
+              let-value
+              let-filter="filterCallback"
+            >
+              <p-multiSelect
+                [ngModel]="value"
+                [options]="representatives"
+                placeholder="Any"
+                (onChange)="filter($event.value)"
+                optionLabel="name"
+              >
+                <ng-template let-option pTemplate="item">
+                  <div class="inline-block vertical-align-middle">
+                    <img
+                      [alt]="option.label"
+                      src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{
+                        option.image
+                      }}"
+                      width="24"
+                      class="vertical-align-middle"
+                    />
+                    <span class="ml-1 mt-1">{{ option.name }}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+      <th style="min-width: 10rem">
+        <div class="flex align-items-center">
+          Estado
+          <p-columnFilter field="status" matchMode="equals" display="menu">
+            <ng-template
+              pTemplate="filter"
+              let-value
+              let-filter="filterCallback"
+            >
+              <p-dropdown
+                [ngModel]="value"
+                [options]="statuses"
+                (onChange)="filter($event.value)"
+                placeholder="Any"
+              >
+                <ng-template let-option pTemplate="item">
+                  <p-tag
+                    [value]="option.value"
+                    [severity]="getSeverity(option.label)"
+                  ></p-tag>
+                </ng-template>
+              </p-dropdown>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-customer>
+    <tr>
+      <td>
+        {{ customer.name }}
+      </td>
+      <td>
+        <img
+          src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+          [class]="'flag flag-' + customer.country.code"
+          style="width: 20px"
+        />
+        <span class="ml-1 vertical-align-middle">{{
+          customer.country.name
+        }}</span>
+      </td>
+      <td>
+        <img
+          [alt]="customer.representative.name"
+          src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{
+            customer.representative.image
+          }}"
+          width="32"
+          style="vertical-align: middle"
+        />
+        <span class="ml-1 vertical-align-middle">{{
+          customer.representative.name
+        }}</span>
+      </td>
+      <td>
+        {{ customer.date | date : "MM/dd/yyyy" }}
+      </td>
+      <td>
+        {{ customer.balance | currency : "USD" : "symbol" }}
+      </td>
+      <td>
+        <p-tag
+          [value]="customer.status"
+          [severity]="getSeverity(customer.status)"
+        ></p-tag>
+      </td>
+      <td>
+        <p-progressBar
+          [value]="customer.activity"
+          [showValue]="false"
+        ></p-progressBar>
+      </td>
+      <td class="text-center">
+        <i
+          class="pi"
+          [ngClass]="{
+            'text-green-500 pi-check-circle': customer.verified,
+            'text-red-500 pi-times-circle': !customer.verified
+          }"
+        ></i>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="7">No customers found.</td>
+    </tr>
+  </ng-template>
+</p-table>
